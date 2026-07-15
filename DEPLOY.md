@@ -86,6 +86,19 @@ docker run --rm -v loban_loban_data:/data -v $PWD:/backup alpine \
 
 Khôi phục: giải nén ngược vào volume `loban_loban_data`.
 
+## VM RAM nhỏ (e2-micro 1GB free tier)
+
+`npm run build` lúc `docker compose up --build` có thể hết RAM (OOM). Tạo swap 2GB
+trước khi build:
+
+```bash
+sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+sudo mkswap /swapfile && sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab   # giữ swap sau reboot
+```
+
+Đặt `LOBAN_WEB_WORKER_CONCURRENCY=1` trong `.env`.
+
 ## Lưu ý quy mô
 
 - **Không scale ngang** (queue in-memory + SQLite 1 file) → giữ **1 instance**.
