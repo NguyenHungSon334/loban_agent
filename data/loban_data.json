@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.0.1",
   "updated": "2026-07-15",
   "source": "công thức chuẩn Hồn Đá cấp; đối chiếu Wonder.vn; bổ sung cung nhỏ",
   "border_mm": 10.0,
@@ -52,8 +52,8 @@
         { "name": "Nghĩa", "good": true,  "start_mm": 155.2, "end_mm": 194.0, "sub": ["Đại cát", "Tài vượng", "Lợi ích", "Thiên khố"] },
         { "name": "Quan",  "good": true,  "start_mm": 194.0, "end_mm": 232.8, "sub": ["Phú quý", "Tiến bảo", "Tài lộc", "Thuận khoa"] },
         { "name": "Tử",    "good": false, "start_mm": 232.8, "end_mm": 271.6, "sub": ["Ly hương", "Tử biệt", "Thoái đinh", "Thất tài"] },
-        { "name": "Thất",  "good": false, "start_mm": 271.6, "end_mm": 310.4, "sub": ["Cô quả", "Lao chấp", "Công sự", "Thoái tài"] },
-        { "name": "Hưng",  "good": true,  "start_mm": 310.4, "end_mm": 349.2, "sub": ["Đăng khoa", "Quý tử", "Thêm đinh", "Hưng vượng"] },
+        { "name": "Hưng",  "good": true,  "start_mm": 271.6, "end_mm": 310.4, "sub": ["Đăng khoa", "Quý tử", "Thêm đinh", "Hưng vượng"] },
+        { "name": "Thất",  "good": false, "start_mm": 310.4, "end_mm": 349.2, "sub": ["Cô quả", "Lao chấp", "Công sự", "Thoái tài"] },
         { "name": "Tài",   "good": true,  "start_mm": 349.2, "end_mm": 388.0, "sub": ["Nghinh phúc", "Lục hợp", "Tiến bảo", "Tài đức"] }
       ]
     }

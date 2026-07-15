@@ -15,6 +15,7 @@ GOLDEN = [
     (2500, "38.8", "Nghĩa", True, False),
     (790, "38.8", "Đinh", True, False),
     (2830, "38.8", "Vượng", True, True),      # sát biên Khổ (xấu) 2.40mm
+    (1460, "38.8", "Hưng", True, False),      # pos 296 -> Hưng (Thêm đinh); thứ tự Hưng/Thất
     # Thước 52.2 — thông thủy
     (610, "52.2", "Hiểm Họa", False, False),   # khác ảnh mẫu (D9)
     (2060, "52.2", "Tể Tướng", True, False),   # khác ảnh mẫu (D9)

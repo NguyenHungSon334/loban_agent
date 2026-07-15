@@ -38,10 +38,10 @@ def test_no_option_needs_architect():
 
 
 def test_mo_two_stage_extends_to_100():
-    d, lb = _run("mo", "phu_bi", 300)           # Thất xấu; good dưới cần >50mm
+    d, lb = _run("mo", "phu_bi", 90)            # Vượng tốt; cung tốt khác đều >50mm
     s = suggest(d, lb)
-    assert s.lower_mm == 232 and s.lower_cung == "Quan"   # tìm được nhờ mở rộng ±100
-    assert s.upper_mm == 311 and s.upper_cung == "Hưng"   # trong ±50
+    assert s.lower_mm == 38 and s.lower_cung == "Đinh"    # Δ52 -> nhờ mở rộng ±100
+    assert s.upper_mm == 156 and s.upper_cung == "Nghĩa"  # Δ66 -> nhờ mở rộng ±100
 
 
 def test_khoang_cach_now_suggested():
