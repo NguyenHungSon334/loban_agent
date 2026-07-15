@@ -1,0 +1,68 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-body);
+  background: var(--color-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* display headline: Inter 600 + negative tracking = chữ ký Cal Sans thay thế */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--display-tracking);
+  color: var(--color-ink);
+  line-height: 1.1;
+  margin: 0;
+}
+h1 {
+  font-size: clamp(2rem, 1rem + 5vw, 4rem);
+} /* display-xl 64px, mobile 32px */
+h2 {
+  font-size: clamp(1.75rem, 1rem + 3vw, 3rem);
+} /* display-lg 48px */
+h3 {
+  font-size: 1.75rem;
+} /* display-sm 28px */
+
+a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* main giữ footer dưới đáy trên trang ngắn */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.app-main {
+  flex: 1;
+}

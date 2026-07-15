@@ -1,0 +1,16 @@
+.card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+.feature {
+  background: var(--color-surface-card);
+}
+.product {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  padding: var(--space-lg);
+}
+.plain {
+  background: transparent;
+  padding: 0;
+}

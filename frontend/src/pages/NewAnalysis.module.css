@@ -1,0 +1,85 @@
+.page {
+  padding: var(--space-section) 0;
+  text-align: center;
+}
+.title {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.lede {
+  max-width: 600px;
+  margin: var(--space-md) auto var(--space-xl);
+  color: var(--color-body);
+}
+.card {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  text-align: left;
+}
+.form > button {
+  align-self: center;
+  min-width: 220px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+.drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 96px;
+  padding: var(--space-md);
+  border: 1px dashed var(--color-surface-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+  cursor: pointer;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+.drop:hover {
+  border-color: var(--color-ink);
+}
+.file {
+  display: none;
+}
+.flags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+.pill {
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-canvas);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.pillOn {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.err {
+  margin: 0;
+  text-align: center;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

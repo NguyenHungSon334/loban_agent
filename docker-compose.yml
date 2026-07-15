@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env                 # LOBAN_GEMINI_API_KEY, tùy chọn LOBAN_WEB_*
+    volumes:
+      - loban_data:/data           # SQLite + output/ bền
+    expose:
+      - "8000"                     # chỉ Caddy truy cập, không mở ra ngoài
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      DOMAIN: ${DOMAIN:-:80}       # đặt DOMAIN trong .env -> auto HTTPS; trống -> HTTP :80
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  loban_data:
+  caddy_data:
+  caddy_config:

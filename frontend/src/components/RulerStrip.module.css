@@ -1,0 +1,108 @@
+.strip {
+  margin-bottom: var(--space-xxl);
+}
+.head {
+  font-size: 16px;
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+.scroll {
+  overflow-x: auto;
+  padding-top: 24px; /* chỗ cho nhãn cm */
+}
+.track {
+  position: relative;
+}
+.ticks {
+  position: relative;
+  height: 18px;
+}
+.tick {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.tick::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  width: 1px;
+  height: 8px;
+  background: var(--color-hairline);
+}
+.cungRow {
+  display: flex;
+  border-left: 1px solid var(--color-hairline);
+}
+.bigCung {
+  flex: 1;
+  border-right: 1px solid var(--color-hairline);
+  text-align: center;
+}
+.bigName {
+  font-size: 17px;
+  font-weight: 700;
+  padding: 12px 4px;
+  border-bottom: 4px solid;
+}
+.good .bigName {
+  color: #d12f2f;
+  border-bottom-color: #d12f2f;
+}
+.bad .bigName {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-ink);
+}
+.subRow {
+  display: flex;
+}
+.subCell {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  padding: 10px 4px;
+  border-right: 1px solid var(--color-hairline-soft);
+  color: var(--color-body);
+}
+.subCell:last-child {
+  border-right: none;
+}
+.good .subCell {
+  color: #d12f2f;
+}
+.marker {
+  position: absolute;
+  top: -6px;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-warning);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35);
+  pointer-events: none;
+}
+.marker::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-warning);
+}
+.result {
+  margin-top: var(--space-sm);
+  font-size: 16px;
+  color: var(--color-body);
+}
+.goodText {
+  color: #d12f2f;
+  font-weight: 700;
+}
+.badText {
+  color: var(--color-ink);
+  font-weight: 700;
+}

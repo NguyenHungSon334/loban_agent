@@ -1,0 +1,6 @@
+# Có DOMAIN (vd loban.example.com) -> Caddy tự xin cert Let's Encrypt (HTTPS).
+# Không có DOMAIN -> chạy HTTP cổng 80 (dùng IP VM tạm, chưa có tên miền).
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:8000
+}

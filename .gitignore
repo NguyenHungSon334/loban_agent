@@ -1,0 +1,25 @@
+# secrets
+.env
+.env.local
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# state / output (bền trên volume, không commit)
+output/
+*.db
+web.db
+
+# frontend (dist build lại trong Docker)
+frontend/node_modules/
+frontend/dist/
+
+# misc
+scratchpad/
+.DS_Store
