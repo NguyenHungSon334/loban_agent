@@ -28,10 +28,35 @@
   color: var(--color-error);
   font-size: 14px;
 }
-.exportHint {
-  margin: 0 0 var(--space-xs);
+.tableBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+.tableFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.filterCount {
   color: var(--color-muted);
   font-size: 13px;
+}
+.exportHint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+.noRows {
+  padding: var(--space-lg);
+  margin: 0;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 14px;
 }
 .tableCard {
   padding: 0;

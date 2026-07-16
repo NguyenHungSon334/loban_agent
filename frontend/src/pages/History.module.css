@@ -1,6 +1,32 @@
 .page {
   padding: var(--space-xxl) 0 var(--space-section);
 }
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+.search {
+  flex: 1 1 260px;
+  height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+}
+.search:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+.select {
+  height: 40px;
+  padding: 4px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  font-size: 14px;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

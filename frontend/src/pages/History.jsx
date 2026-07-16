@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { deleteHoSo, listHoSo } from "../api/client.js";
 import Badge from "../components/Badge.jsx";
 import Button from "../components/Button.jsx";
 import Card from "../components/Card.jsx";
+import Select from "../components/Select.jsx";
 import styles from "./History.module.css";
 
 const LIMIT = 20;
@@ -12,6 +13,16 @@ const STATUS = {
   done: ["success", "Hoàn tất"],
   error: ["error", "Lỗi"],
 };
+const STATUS_OPTS = [
+  { value: "", label: "Tất cả trạng thái" },
+  { value: "done", label: "Hoàn tất" },
+  { value: "error", label: "Lỗi" },
+  { value: "processing", label: "Đang xử lý" },
+];
+const SORT_OPTS = [
+  { value: "desc", label: "Mới nhất trước" },
+  { value: "asc", label: "Cũ nhất trước" },
+];
 
 function statusBadge(s) {
   const [tone, label] = STATUS[s] || ["warning", "Đang xử lý"];
@@ -24,10 +35,23 @@ function target(j) {
 
 export default function History() {
   const [page, setPage] = useState(0);
+  const [q, setQ] = useState("");
+  const [qDebounced, setQDebounced] = useState("");
+  const [status, setStatus] = useState("");
+  const [sort, setSort] = useState("desc");
   const queryClient = useQueryClient();
+
+  // debounce ô search 300ms + reset về trang đầu khi đổi filter
+  useEffect(() => {
+    const t = setTimeout(() => setQDebounced(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+  useEffect(() => setPage(0), [qDebounced, status, sort]);
+
   const { data = [], isLoading, error } = useQuery({
-    queryKey: ["ho-so", page],
-    queryFn: () => listHoSo(page * LIMIT, LIMIT),
+    queryKey: ["ho-so", page, qDebounced, status, sort],
+    queryFn: () => listHoSo(page * LIMIT, LIMIT, { q: qDebounced, status, sort }),
+    keepPreviousData: true,
   });
 
   async function onDelete(e, hoSo) {
@@ -42,11 +66,29 @@ export default function History() {
     <section className={`container ${styles.page}`}>
       <h2>Hồ sơ đã phân tích</h2>
 
+      <div className={styles.filters}>
+        <input
+          className={styles.search}
+          type="search"
+          placeholder="Tìm mã hồ sơ / khách hàng / địa điểm…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
+        <Select value={status} onChange={setStatus} options={STATUS_OPTS} />
+        <Select value={sort} onChange={setSort} options={SORT_OPTS} />
+      </div>
+
       {isLoading && <p>Đang tải…</p>}
       {error && <p className={styles.err}>Lỗi tải danh sách: {error.message}</p>}
       {!isLoading && !error && data.length === 0 && (
         <p className={styles.empty}>
-          Chưa có hồ sơ nào. <Link to="/">Tạo phân tích mới</Link>.
+          {qDebounced || status ? (
+            "Không có hồ sơ khớp bộ lọc."
+          ) : (
+            <>
+              Chưa có hồ sơ nào. <Link to="/">Tạo phân tích mới</Link>.
+            </>
+          )}
         </p>
       )}
 

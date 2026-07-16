@@ -363,9 +363,15 @@ def export_report(ho_so: str, payload: ExportIn):
     report = _load_report_filtered(ho_so, payload.exclude)
     name = Path(ho_so).name
     if payload.kind == "pdf":
+        from ..ingest import load_inputs
         from ..render.build import build_report_pdf
 
-        data = build_report_pdf(report)
+        job = jobs.get_job(name)
+        drawings: list[bytes] = []
+        if job:                                    # trang đầu = bản vẽ input
+            paths = [p for p in jobs.input_paths(job) if p.exists()]
+            drawings = [b for b, _ in load_inputs(paths)] if paths else []
+        data = build_report_pdf(report, drawings)
         return Response(
             content=data, media_type="application/pdf",
             headers={"Content-Disposition": f'attachment; filename="{name}.pdf"'},
@@ -417,8 +423,15 @@ def delete_ho_so(ho_so: str):
 
 
 @app.get("/api/ho-so")
-def ho_so_list(offset: int = 0, limit: int = 20):
-    return [_job_dto(j) for j in jobs.list_jobs(offset, limit)]
+def ho_so_list(
+    offset: int = 0,
+    limit: int = 20,
+    q: str | None = None,
+    status: str | None = None,
+    sort: str = "desc",
+):
+    rows = jobs.list_jobs(offset, limit, q=q, status=status, sort=sort)
+    return [_job_dto(j) for j in rows]
 
 
 @app.get("/api/rulers")

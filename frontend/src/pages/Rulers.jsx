@@ -4,6 +4,7 @@ import { getRulers, getRules, putRules } from "../api/client.js";
 import Button from "../components/Button.jsx";
 import Card from "../components/Card.jsx";
 import RulerStrip from "../components/RulerStrip.jsx";
+import Select from "../components/Select.jsx";
 import styles from "./Rulers.module.css";
 
 const ORDER = ["52.2", "42.9", "38.8"];
@@ -57,19 +58,13 @@ export default function Rulers() {
 }
 
 const RULER_OPTS = [
-  ["38.8", "38.8cm (âm phần)"],
-  ["42.9", "42.9cm (dương trạch)"],
-  ["52.2", "52.2cm (thông thủy)"],
+  { value: "38.8", label: "38.8cm (âm phần)" },
+  { value: "42.9", label: "42.9cm (dương trạch)" },
+  { value: "52.2", label: "52.2cm (thông thủy)" },
 ];
 function RuleSelect({ value, defaultRuler, onChange }) {
-  return (
-    <select className={styles.select} value={value || ""} onChange={(e) => onChange(e.target.value)}>
-      <option value="">Mặc định ({defaultRuler}cm)</option>
-      {RULER_OPTS.map(([v, lb]) => (
-        <option key={v} value={v}>{lb}</option>
-      ))}
-    </select>
-  );
+  const opts = [{ value: "", label: `Mặc định (${defaultRuler}cm)` }, ...RULER_OPTS];
+  return <Select value={value || ""} onChange={onChange} options={opts} />;
 }
 
 // tên hạng mục -> key ascii (Gemini dùng key): bỏ dấu, thường hóa, non-alnum -> _
@@ -185,11 +180,7 @@ function RuleEditor() {
           onChange={(e) => setNewLabel(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addCat()}
         />
-        <select className={styles.select} value={newRuler} onChange={(e) => setNewRuler(e.target.value)}>
-          {RULER_OPTS.map(([v, lb]) => (
-            <option key={v} value={v}>{lb}</option>
-          ))}
-        </select>
+        <Select value={newRuler} onChange={setNewRuler} options={RULER_OPTS} />
         <Button variant="secondary" onClick={addCat}>+ Thêm hạng mục</Button>
       </div>
 

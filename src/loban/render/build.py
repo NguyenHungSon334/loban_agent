@@ -17,6 +17,7 @@ browser: fitz trích text từ PDF sinh ra để assert nội dung.
 """
 from __future__ import annotations
 
+import io
 from functools import lru_cache
 from pathlib import Path
 
@@ -363,11 +364,27 @@ def _group_by_ruler(report: AnalysisReport) -> dict[str, list[AnalyzedItem]]:
     return groups
 
 
-# ── ĐẦU RA 3: PDF A4 ngang — bảng gộp full width, watermark logo giữa ────────
-# drawing giữ trong chữ ký để tương thích worker/CLI; bản in dùng watermark logo,
-# không nhúng ảnh bản vẽ (yêu cầu bỏ ảnh dưới band tổng thể).
-def build_report_pdf(report: AnalysisReport, drawing: bytes | None = None) -> bytes:
+def _as_drawings(drawing: bytes | list[bytes] | None) -> list[bytes]:
+    if drawing is None:
+        return []
+    return list(drawing) if isinstance(drawing, (list, tuple)) else [drawing]
+
+
+def _drawing_page(pdf: FPDF, data: bytes) -> None:
+    """1 trang chứa ảnh bản vẽ input, vừa khung nội dung, giữ tỉ lệ."""
+    pdf.add_page()
+    try:
+        pdf.image(io.BytesIO(data), x=pdf.l_margin, y=pdf.t_margin,
+                  w=pdf.epw, h=pdf.eph, keep_aspect_ratio=True)
+    except Exception:  # noqa: BLE001 - ảnh lỗi/định dạng lạ -> bỏ qua, vẫn ra bảng
+        pass
+
+
+# ── ĐẦU RA 3: PDF A4 ngang — trang đầu là bản vẽ input, các trang sau là bảng ─
+def build_report_pdf(report: AnalysisReport, drawing: bytes | list[bytes] | None = None) -> bytes:
     pdf = _new_pdf("L", "A4")
+    for d in _as_drawings(drawing):      # gắn (các) bản vẽ input lên trước
+        _drawing_page(pdf, d)
     pdf.add_page()
     _watermark(pdf)
     epw = pdf.epw

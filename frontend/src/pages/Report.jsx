@@ -8,7 +8,20 @@ import Button from "../components/Button.jsx";
 import Card from "../components/Card.jsx";
 import DimensionTable from "../components/DimensionTable.jsx";
 import FloatingChat from "../components/FloatingChat.jsx";
+import Select from "../components/Select.jsx";
 import styles from "./Report.module.css";
+
+const FILTER_STATUS = [
+  { value: "", label: "Tất cả trạng thái" },
+  { value: "tot", label: "Tốt" },
+  { value: "chua_phu_hop", label: "Chưa phù hợp" },
+];
+const FILTER_RULER = [
+  { value: "", label: "Tất cả thước" },
+  { value: "38.8", label: "38.8 cm" },
+  { value: "52.2", label: "52.2 cm" },
+  { value: "42.9", label: "42.9 cm" },
+];
 
 // file: tải file có sẵn · export: render on-demand (PNG/PDF) loại item bỏ tích
 const DOWNLOADS = [
@@ -27,6 +40,8 @@ export default function Report() {
   const [dl, setDl] = useState(null); // tên file đang tải
   const [err, setErr] = useState(null);
   const [excluded, setExcluded] = useState(() => new Set()); // index không xuất bản in
+  const [fStatus, setFStatus] = useState(""); // lọc bảng theo trạng thái
+  const [fRuler, setFRuler] = useState(""); // lọc bảng theo thước
 
   function toggleExclude(i) {
     setExcluded((prev) => {
@@ -91,6 +106,14 @@ export default function Report() {
 
   const { profile, items = [], need_confirm = [], near_border = [], missing = [], warnings = [] } = data;
 
+  const visibleIndices = items
+    .map((_, i) => i)
+    .filter((i) => {
+      if (fStatus && items[i].loban.status !== fStatus) return false;
+      if (fRuler && items[i].loban.ruler !== fRuler) return false;
+      return true;
+    });
+
   return (
     <section className={`container ${styles.page}`}>
       <div className={styles.head}>
@@ -130,9 +153,20 @@ export default function Report() {
 
       {err && <p className={styles.err}>{err}</p>}
 
-      <p className={styles.exportHint}>
-        Bỏ tick ở cột <strong>Xuất</strong> để loại dòng đó khỏi PNG/PDF khi tải.
-      </p>
+      <div className={styles.tableBar}>
+        <div className={styles.tableFilters}>
+          <Select value={fStatus} onChange={setFStatus} options={FILTER_STATUS} />
+          <Select value={fRuler} onChange={setFRuler} options={FILTER_RULER} />
+          {(fStatus || fRuler) && (
+            <span className={styles.filterCount}>
+              {visibleIndices.length}/{items.length} dòng
+            </span>
+          )}
+        </div>
+        <p className={styles.exportHint}>
+          Bỏ tick cột <strong>Xuất</strong> để loại dòng khỏi PNG/PDF.
+        </p>
+      </div>
       <Card variant="product" className={styles.tableCard}>
         <DimensionTable
           items={items}
@@ -140,7 +174,11 @@ export default function Report() {
           busyIndex={busyIndex}
           excluded={excluded}
           onToggleExclude={toggleExclude}
+          visibleIndices={visibleIndices}
         />
+        {visibleIndices.length === 0 && (
+          <p className={styles.noRows}>Không có dòng khớp bộ lọc.</p>
+        )}
       </Card>
 
       {(need_confirm.length > 0 || near_border.length > 0 || missing.length > 0) && (

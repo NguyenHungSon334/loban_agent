@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from sqlalchemy import or_
 from sqlmodel import select
 
 from ..models import Profile
@@ -84,14 +85,35 @@ def get_job(ho_so: str) -> AnalysisJob | None:
         return s.get(AnalysisJob, ho_so)
 
 
-def list_jobs(offset: int = 0, limit: int = 20) -> list[AnalysisJob]:
+def list_jobs(
+    offset: int = 0,
+    limit: int = 20,
+    *,
+    q: str | None = None,
+    status: str | None = None,
+    sort: str = "desc",
+) -> list[AnalysisJob]:
+    """Lọc server-side: q khớp mã/khách/địa điểm; status=done|error|processing;
+    sort=desc|asc theo ngày tạo."""
     with session() as s:
-        stmt = (
-            select(AnalysisJob)
-            .order_by(AnalysisJob.created_at.desc())
-            .offset(offset)
-            .limit(limit)
-        )
+        stmt = select(AnalysisJob)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(
+                or_(
+                    AnalysisJob.ho_so.ilike(like),
+                    AnalysisJob.khach_hang.ilike(like),
+                    AnalysisJob.dia_diem.ilike(like),
+                )
+            )
+        if status == "done":
+            stmt = stmt.where(AnalysisJob.status == "done")
+        elif status == "error":
+            stmt = stmt.where(AnalysisJob.status == "error")
+        elif status == "processing":
+            stmt = stmt.where(AnalysisJob.status.in_(PENDING))
+        order = AnalysisJob.created_at.asc() if sort == "asc" else AnalysisJob.created_at.desc()
+        stmt = stmt.order_by(order).offset(offset).limit(limit)
         return list(s.exec(stmt))
 
 

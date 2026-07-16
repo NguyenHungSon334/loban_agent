@@ -20,8 +20,11 @@ export function getReport(hoSo) {
   return fetch(`/api/report/${encodeURIComponent(hoSo)}`).then(json);
 }
 
-export function listHoSo(offset = 0, limit = 20) {
-  return fetch(`/api/ho-so?offset=${offset}&limit=${limit}`).then(json);
+export function listHoSo(offset = 0, limit = 20, { q = "", status = "", sort = "desc" } = {}) {
+  const p = new URLSearchParams({ offset, limit, sort });
+  if (q) p.set("q", q);
+  if (status) p.set("status", status);
+  return fetch(`/api/ho-so?${p.toString()}`).then(json);
 }
 
 export function getRulers() {
