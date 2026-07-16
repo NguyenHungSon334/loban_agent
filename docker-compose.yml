@@ -1,5 +1,7 @@
 services:
   app:
+    # build ở máy khỏe rồi push; VPS chỉ pull image này (đặt LOBAN_IMAGE trong .env).
+    image: ${LOBAN_IMAGE:-loban-app:latest}
     build: .
     restart: unless-stopped
     env_file: .env                 # LOBAN_GEMINI_API_KEY, tùy chọn LOBAN_WEB_*
