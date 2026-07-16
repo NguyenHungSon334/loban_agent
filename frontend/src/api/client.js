@@ -60,6 +60,15 @@ export function putRules(cfg) {
   }).then(json);
 }
 
+// Chat tư vấn Lỗ Ban. hoSo tùy chọn (hỏi trong hồ sơ). files: mảng File media.
+export function sendChat(message, files = [], hoSo = null) {
+  const fd = new FormData();
+  fd.append("message", message);
+  if (hoSo) fd.append("ho_so", hoSo);
+  for (const f of files) fd.append("files", f);
+  return fetch("/api/chat", { method: "POST", body: fd }).then(json);
+}
+
 export function fileUrl(hoSo, name) {
   return `/api/files/${encodeURIComponent(hoSo)}/${encodeURIComponent(name)}`;
 }

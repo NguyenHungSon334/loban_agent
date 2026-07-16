@@ -8,7 +8,12 @@
 }
 .scroll {
   overflow-x: auto;
+  scrollbar-width: none;        /* ẩn scrollbar, vẫn scroll */
+  -ms-overflow-style: none;
   padding-top: 24px; /* chỗ cho nhãn cm */
+}
+.scroll::-webkit-scrollbar {
+  display: none;
 }
 .track {
   position: relative;
@@ -75,23 +80,19 @@
   color: #d12f2f;
 }
 .marker {
-  position: absolute;
-  top: -6px;
-  bottom: 0;
-  width: 2px;
-  background: var(--color-warning);
-  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35);
-  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
-.marker::before {
-  content: "";
+.markerTag {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  width: 10px;
-  height: 10px;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 6px;
   border-radius: var(--radius-pill);
-  background: var(--color-warning);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
 }
 .result {
   margin-top: var(--space-sm);

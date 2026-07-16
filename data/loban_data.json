@@ -1,7 +1,7 @@
 {
-  "version": "2.0.1",
+  "version": "2.1.0",
   "updated": "2026-07-15",
-  "source": "công thức chuẩn Hồn Đá cấp; đối chiếu Wonder.vn; bổ sung cung nhỏ",
+  "source": "chuẩn hóa cung nhỏ theo Wonder.vn (38.8/42.9/52.2); Hồn Đá đối chiếu",
   "border_mm": 10.0,
   "rulers": {
     "52.2": {
@@ -12,12 +12,12 @@
       "sub_step_mm": 13.05,
       "cung": [
         { "name": "Quý Nhân",  "good": true,  "start_mm": 0.0,    "end_mm": 65.25,  "sub": ["Quyền lộc", "Trung tín", "Tác quan", "Phát đạt", "Thông minh"] },
-        { "name": "Hiểm Họa",  "good": false, "start_mm": 65.25,  "end_mm": 130.5,  "sub": ["Án thành", "Hỗn nhân", "Thất hiếu", "Tai họa", "Trường bệnh"] },
+        { "name": "Hiểm Họa",  "good": false, "start_mm": 65.25,  "end_mm": 130.5,  "sub": ["Án thành", "Hỗn nhân", "Thất hiếu", "Tài họa", "Trường bệnh"] },
         { "name": "Thiên Tai", "good": false, "start_mm": 130.5,  "end_mm": 195.75, "sub": ["Hoàn tử", "Quan tài", "Thân tàn", "Thất tài", "Hệ quả"] },
         { "name": "Thiên Tài", "good": true,  "start_mm": 195.75, "end_mm": 261.0,  "sub": ["Thi thơ", "Văn học", "Thanh quý", "Tác lộc", "Thiên lộc"] },
-        { "name": "Phúc Lộc",  "good": true,  "start_mm": 261.0,  "end_mm": 326.25, "sub": ["Trí tồn", "Phú quý", "Tiến bửu", "Thập thiện", "Văn chương"] },
+        { "name": "Nhân Lộc",  "good": true,  "start_mm": 261.0,  "end_mm": 326.25, "sub": ["Trí tồn", "Phú quý", "Tiến bửu", "Thập thiện", "Văn chương"] },
         { "name": "Cô Độc",    "good": false, "start_mm": 326.25, "end_mm": 391.5,  "sub": ["Bạc nghịch", "Vô vọng", "Ly tán", "Tửu thục", "Dâm dục"] },
-        { "name": "Thiên Tặc", "good": false, "start_mm": 391.5,  "end_mm": 456.75, "sub": ["Phong bệnh", "Chiêu ôn", "Ôn tài", "Ngục tù", "Quan tài"] },
+        { "name": "Thiên Tặc", "good": false, "start_mm": 391.5,  "end_mm": 456.75, "sub": ["Phong bệnh", "Chiêu ôn", "Ôn tài", "Ngục tù", "Quang tài"] },
         { "name": "Tể Tướng",  "good": true,  "start_mm": 456.75, "end_mm": 522.0,  "sub": ["Đại tài", "Thi thơ", "Hoạch tài", "Hiếu tử", "Quý nhân"] }
       ]
     },
@@ -28,13 +28,13 @@
       "sub_count": 4,
       "sub_step_mm": 13.40625,
       "cung": [
-        { "name": "Tài",   "good": true,  "start_mm": 0.0,     "end_mm": 53.625,  "sub": ["Tài đức", "Báo khố", "Nghênh phúc", "Đăng khoa"] },
-        { "name": "Bệnh",  "good": false, "start_mm": 53.625,  "end_mm": 107.25,  "sub": ["Thoát tài", "Công sự", "Lao chấp", "Cô quả"] },
-        { "name": "Ly",    "good": false, "start_mm": 107.25,  "end_mm": 160.875, "sub": ["Trưởng khố", "Kiếp tài", "Quan quỷ", "Thất thoát"] },
+        { "name": "Tài",   "good": true,  "start_mm": 0.0,     "end_mm": 53.625,  "sub": ["Tài đức", "Bảo khố", "Lục hợp", "Nghênh phúc"] },
+        { "name": "Bệnh",  "good": false, "start_mm": 53.625,  "end_mm": 107.25,  "sub": ["Thoái tài", "Công sự", "Lao chấp", "Cô quả"] },
+        { "name": "Ly",    "good": false, "start_mm": 107.25,  "end_mm": 160.875, "sub": ["Trường bệnh", "Kiếp tài", "Quan quỉ", "Thất thoát"] },
         { "name": "Nghĩa", "good": true,  "start_mm": 160.875, "end_mm": 214.5,   "sub": ["Thêm đinh", "Ích lợi", "Quý tử", "Đại cát"] },
-        { "name": "Quan",  "good": true,  "start_mm": 214.5,   "end_mm": 268.125, "sub": ["Thuận khoa", "Tiến bảo", "Phú quý", "Tài lộc"] },
-        { "name": "Kiếp",  "good": false, "start_mm": 268.125, "end_mm": 321.75,  "sub": ["Tử biệt", "Thoái khẩu", "Ly hương", "Tài thất"] },
-        { "name": "Hại",   "good": false, "start_mm": 321.75,  "end_mm": 375.375, "sub": ["Tai chí", "Tử tuyệt", "Bệnh lâm", "Khẩu thiệt"] },
+        { "name": "Quan",  "good": true,  "start_mm": 214.5,   "end_mm": 268.125, "sub": ["Thuận khoa", "Hoạch tài", "Tấn đức", "Phú quí"] },
+        { "name": "Kiếp",  "good": false, "start_mm": 268.125, "end_mm": 321.75,  "sub": ["Tử biệt", "Khoái khẩu", "Ly hương", "Thất tài"] },
+        { "name": "Hại",   "good": false, "start_mm": 321.75,  "end_mm": 375.375, "sub": ["Tài chí", "Tử tuyệt", "Lâm bệnh", "Khẩu thiệt"] },
         { "name": "Bản",   "good": true,  "start_mm": 375.375, "end_mm": 429.0,   "sub": ["Tài chí", "Đăng khoa", "Tiến bảo", "Hưng vượng"] }
       ]
     },
@@ -46,15 +46,15 @@
       "sub_step_mm": 9.7,
       "cung": [
         { "name": "Đinh",  "good": true,  "start_mm": 0.0,   "end_mm": 38.8,  "sub": ["Phúc tinh", "Cấp đệ", "Tài vượng", "Đăng khoa"] },
-        { "name": "Hại",   "good": false, "start_mm": 38.8,  "end_mm": 77.6,  "sub": ["Khẩu thiệt", "Bệnh lâm", "Tử tuyệt", "Tai chí"] },
-        { "name": "Vượng", "good": true,  "start_mm": 77.6,  "end_mm": 116.4, "sub": ["Thiên đức", "Hỷ sự", "Tiến bảo", "Thêm phúc"] },
-        { "name": "Khổ",   "good": false, "start_mm": 116.4, "end_mm": 155.2, "sub": ["Thất thoát", "Quan quỷ", "Kiếp tài", "Vô tự"] },
-        { "name": "Nghĩa", "good": true,  "start_mm": 155.2, "end_mm": 194.0, "sub": ["Đại cát", "Tài vượng", "Lợi ích", "Thiên khố"] },
-        { "name": "Quan",  "good": true,  "start_mm": 194.0, "end_mm": 232.8, "sub": ["Phú quý", "Tiến bảo", "Tài lộc", "Thuận khoa"] },
+        { "name": "Hại",   "good": false, "start_mm": 38.8,  "end_mm": 77.6,  "sub": ["Khẩu thiệt", "Lâm bệnh", "Tử tuyệt", "Tai chí"] },
+        { "name": "Vượng", "good": true,  "start_mm": 77.6,  "end_mm": 116.4, "sub": ["Thiên đức", "Hỷ sự", "Tiến bảo", "Nạp phúc"] },
+        { "name": "Khổ",   "good": false, "start_mm": 116.4, "end_mm": 155.2, "sub": ["Thất thoát", "Quan quỉ", "Kiếp tài", "Vô tự"] },
+        { "name": "Nghĩa", "good": true,  "start_mm": 155.2, "end_mm": 194.0, "sub": ["Đại cát", "Tài vượng", "Ích lợi", "Thiên khố"] },
+        { "name": "Quan",  "good": true,  "start_mm": 194.0, "end_mm": 232.8, "sub": ["Phú quí", "Tiến bảo", "Hoạch tài", "Thuận khoa"] },
         { "name": "Tử",    "good": false, "start_mm": 232.8, "end_mm": 271.6, "sub": ["Ly hương", "Tử biệt", "Thoái đinh", "Thất tài"] },
         { "name": "Hưng",  "good": true,  "start_mm": 271.6, "end_mm": 310.4, "sub": ["Đăng khoa", "Quý tử", "Thêm đinh", "Hưng vượng"] },
         { "name": "Thất",  "good": false, "start_mm": 310.4, "end_mm": 349.2, "sub": ["Cô quả", "Lao chấp", "Công sự", "Thoái tài"] },
-        { "name": "Tài",   "good": true,  "start_mm": 349.2, "end_mm": 388.0, "sub": ["Nghinh phúc", "Lục hợp", "Tiến bảo", "Tài đức"] }
+        { "name": "Tài",   "good": true,  "start_mm": 349.2, "end_mm": 388.0, "sub": ["Nghênh phúc", "Lục hợp", "Tiến bảo", "Tài đức"] }
       ]
     }
   }

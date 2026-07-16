@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     model_extract: str = "gemini-3.5-flash"        # bóc tách chính
     model_extract_light: str = "gemini-3.5-flash"  # ảnh đơn giản/rẻ
+    # chat tư vấn CẦN function calling ổn định (tra_cung/sua_kich_thuoc).
+    # KHÔNG dùng *-lite: model lite hay bỏ qua tool -> bịa cung sai + không sửa được JSON.
+    model_chat: str = "gemini-3.5-flash"
     extract_temperature: float = 0.0
 
 

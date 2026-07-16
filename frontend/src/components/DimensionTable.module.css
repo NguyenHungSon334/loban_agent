@@ -1,5 +1,10 @@
 .wrap {
   overflow-x: auto;
+  scrollbar-width: none;        /* ẩn scrollbar, vẫn scroll */
+  -ms-overflow-style: none;
+}
+.wrap::-webkit-scrollbar {
+  display: none;
 }
 .table {
   width: 100%;

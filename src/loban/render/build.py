@@ -99,7 +99,12 @@ def _eval_style(it: AnalyzedItem) -> tuple[str, FontFace]:
 def _cung_name(it: AnalyzedItem) -> str:
     if not it.loban.cung:
         return "—"
-    return it.loban.cung + (f"\n{it.loban.cung_nho}" if it.loban.cung_nho else "")
+    txt = it.loban.cung + (f"\n{it.loban.cung_nho}" if it.loban.cung_nho else "")
+    cross = it.loban.cross
+    if cross and cross.cung:
+        mark = "✓" if cross.cung_good else "△"
+        txt += f"\n[{cross.ruler}: {cross.cung} {mark}]"
+    return txt
 
 
 def _item_label(it: AnalyzedItem) -> str:
@@ -333,6 +338,11 @@ def _ghichu_box(pdf: FPDF, report: AnalysisReport, width: float) -> None:
     if report.need_confirm:
         pdf.set_text_color(*_ORANGE)
         pdf.multi_cell(width, 4.2, "Cần xác nhận (*): " + ", ".join(report.need_confirm),
+                       new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        pdf.set_text_color(*_INK)
+    if report.missing:
+        pdf.set_text_color(*_ORANGE)
+        pdf.multi_cell(width, 4.2, "Thiếu / cần đo bổ sung: " + ", ".join(report.missing),
                        new_x=XPos.LMARGIN, new_y=YPos.NEXT)
         pdf.set_text_color(*_INK)
     for n in report.near_border:

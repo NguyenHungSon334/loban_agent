@@ -1,0 +1,204 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 180px;
+  max-height: 460px;
+  overflow-y: auto;
+  scrollbar-width: none;        /* ẩn scrollbar, vẫn scroll */
+  -ms-overflow-style: none;
+  padding: var(--space-md);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+}
+.log::-webkit-scrollbar {
+  display: none;
+}
+.hint {
+  margin: auto;
+  color: var(--color-muted);
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.7;
+}
+.hintLink {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.dragging {
+  border-color: var(--color-primary);
+  border-style: dashed;
+  background: var(--color-surface-soft);
+}
+.user,
+.bot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  max-width: 80%;
+}
+.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+.bot {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+.bubble {
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.user .bubble {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-bottom-right-radius: var(--radius-xs);
+}
+.bot .bubble {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  border-bottom-left-radius: var(--radius-xs);
+}
+.thumb {
+  max-width: 160px;
+  max-height: 160px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+/* animation "đang xử lý" — 3 chấm nảy */
+.typing {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  animation: chatDot 1.2s ease-in-out infinite;
+}
+.typing span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes chatDot {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+/* xác nhận đã sửa hồ sơ */
+.updated {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-success);
+}
+/* thanh "đang cập nhật báo cáo" khi refetch */
+.updateBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  font-size: 13px;
+  color: var(--color-body);
+}
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-hairline);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: chatSpin 0.7s linear infinite;
+}
+@keyframes chatSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.err {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 13px;
+}
+.attachRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-soft);
+  font-size: 13px;
+  color: var(--color-body);
+}
+.chip button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--color-muted);
+}
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+.attach {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.attach:hover {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+.input {
+  flex: 1;
+  resize: vertical;
+  min-height: 40px;
+  max-height: 160px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  font: inherit;
+  font-size: 14px;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}

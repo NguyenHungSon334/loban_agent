@@ -15,15 +15,33 @@ import os
 from functools import lru_cache
 from pathlib import Path
 
-from .models import Dimension, LobanResult, RulerKey
+from .models import CrossCheck, Dimension, LobanResult, RulerKey
 from .ruler import lookup
 
 _DEFAULT_PATH = Path(__file__).resolve().parents[2] / "data" / "category_rules.json"
+_DEFAULT_CATEGORIES: list[dict] = [
+    {"key": "mo", "label": "Mộ"},
+    {"key": "cong", "label": "Cổng đá / cột cổng"},
+    {"key": "hang_rao", "label": "Hàng rào / lan can"},
+    {"key": "tran_phong", "label": "Trấn phong / cuốn thư"},
+    {"key": "long_dinh", "label": "Long đình / lăng thờ chung"},
+    {"key": "loi_di", "label": "Lối đi / bậc tam cấp"},
+    {"key": "khoang_cach", "label": "Khoảng cách bố trí"},
+    {"key": "lang_tho", "label": "Lăng thờ"},
+    {"key": "mat_bang", "label": "Mặt bằng khu"},
+]
 _DEFAULT_RULES: dict = {
     "default_ruler": "38.8",
     "thong_thuy_ruler": "52.2",
     "category_ruler": {"loi_di": "52.2"},                     # lối đi = thông thủy (QT3)
-    "category_kind_ruler": {"lang_tho.tong_the": "42.9"},     # lăng thờ tổng thể (QT2)
+    "category_kind_ruler": {                                  # tổng thể lăng/long đình (QT2)
+        "lang_tho.tong_the": "42.9",
+        "long_dinh.tong_the": "42.9",
+    },
+    # đối chiếu THÊM thước phụ: cổng thông thủy tính cả 38.8 (khối) lẫn 52.2 (chính)
+    "cross_ruler": {"cong.thong_thuy": "38.8"},
+    "categories": _DEFAULT_CATEGORIES,                        # danh sách hạng mục (sửa được ở UI)
+    "checklist": {},                                          # kích thước kỳ vọng/hạng mục (data file)
 }
 _VALID_RULERS = ("38.8", "42.9", "52.2")
 
@@ -55,6 +73,9 @@ def save_rules(cfg: dict) -> dict:
     for c, r in merged.get("category_kind_ruler", {}).items():
         if r not in _VALID_RULERS:
             raise ValueError(f"thước không hợp lệ cho {c}: {r}")
+    for c, r in merged.get("cross_ruler", {}).items():
+        if r not in _VALID_RULERS:
+            raise ValueError(f"thước phụ không hợp lệ cho {c}: {r}")
     p = _rules_path()
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -75,12 +96,26 @@ def ruler_for(category: str, kind: str) -> RulerKey:
     return cfg["default_ruler"]
 
 
+def _cross_for(category: str, kind: str, primary: RulerKey) -> RulerKey | None:
+    """Thước phụ đối chiếu thêm (khác thước chính). None nếu không cấu hình."""
+    r = load_rules().get("cross_ruler", {}).get(f"{category}.{kind}")
+    return r if r and r != primary else None
+
+
 def classify(dim: Dimension) -> LobanResult:
     ruler = ruler_for(dim.category, dim.kind)
     if ruler is None or dim.value_mm is None:
         return LobanResult(ruler=ruler, status="khong_ap_dung")
 
     hit = lookup(dim.value_mm, ruler)
+    cross = None
+    alt = _cross_for(dim.category, dim.kind, ruler)
+    if alt is not None:
+        ch = lookup(dim.value_mm, alt)
+        cross = CrossCheck(
+            ruler=alt, cung=ch.name, cung_nho=ch.sub_name or None,
+            cung_good=ch.good, status="tot" if ch.good else "chua_phu_hop",
+        )
     return LobanResult(
         ruler=ruler,
         cung=hit.name,
@@ -89,4 +124,5 @@ def classify(dim: Dimension) -> LobanResult:
         near_border=hit.near_border,
         border_note=hit.border_note,
         status="tot" if hit.good else "chua_phu_hop",
+        cross=cross,
     )

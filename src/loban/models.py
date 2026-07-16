@@ -5,7 +5,14 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-Category = Literal["mo", "cong", "loi_di", "khoang_cach", "lang_tho", "mat_bang"]
+# Hạng mục gốc. Cho phép hạng mục tùy biến (cấu hình ở trang Thước) -> để str,
+# danh sách khả dụng được bơm vào prompt extract để Gemini biết chọn.
+# long_dinh/lang_tho tách riêng để checklist "đo gì" chính xác theo hạng mục.
+KNOWN_CATEGORIES = (
+    "mo", "cong", "hang_rao", "tran_phong", "long_dinh",
+    "loi_di", "khoang_cach", "lang_tho", "mat_bang",
+)
+Category = str
 # phu_bi=mép ngoài, thong_thuy=lọt sáng, lot_long=trong lòng,
 # khoi=khối đặc, tong_the=kích thước tổng, hop_tho=hộp thờ/bài vị
 Kind = Literal["phu_bi", "thong_thuy", "lot_long", "khoi", "tong_the", "hop_tho"]
@@ -25,6 +32,15 @@ class Dimension(BaseModel):
     estimated: bool = False          # True nếu suy theo tỷ lệ bản vẽ
 
 
+class CrossCheck(BaseModel):
+    """Đối chiếu THÊM bằng thước phụ (vd cổng thông thủy: 52.2 chính + 38.8 phụ)."""
+    ruler: RulerKey
+    cung: str | None = None
+    cung_nho: str | None = None
+    cung_good: bool | None = None
+    status: Status = "khong_ap_dung"
+
+
 class LobanResult(BaseModel):
     ruler: RulerKey | None = None
     cung: str | None = None            # cung lớn
@@ -33,6 +49,7 @@ class LobanResult(BaseModel):
     near_border: bool = False
     border_note: str | None = None
     status: Status = "khong_ap_dung"
+    cross: CrossCheck | None = None    # thước phụ đối chiếu thêm (nếu có)
 
 
 class Suggestion(BaseModel):
@@ -73,4 +90,5 @@ class AnalysisReport(BaseModel):
     items: list[AnalyzedItem] = Field(default_factory=list)
     need_confirm: list[str] = Field(default_factory=list)   # nhãn kích thước cần xác nhận
     near_border: list[str] = Field(default_factory=list)     # cảnh báo sát biên cung
+    missing: list[str] = Field(default_factory=list)         # kích thước bắt buộc còn thiếu (checklist)
     warnings: list[str] = Field(default_factory=list)

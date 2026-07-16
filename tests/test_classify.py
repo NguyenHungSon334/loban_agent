@@ -59,3 +59,18 @@ def test_classify_near_border_propagates():
     assert r.status == "tot"
     assert r.near_border is True
     assert "Hại" in r.border_note
+
+
+def test_cong_thong_thuy_dual_ruler():
+    # cổng thông thủy: chính 52.2 + đối chiếu THÊM 38.8 (cross_ruler mặc định)
+    r = classify(_dim("cong", "thong_thuy", 810))
+    assert r.ruler == "52.2"
+    assert r.cross is not None
+    assert r.cross.ruler == "38.8"
+    assert r.cross.cung is not None
+    assert r.cross.status in ("tot", "chua_phu_hop")
+
+
+def test_no_cross_for_normal_dim():
+    r = classify(_dim("mo", "phu_bi", 870))
+    assert r.cross is None

@@ -5,7 +5,8 @@ nên chạy/kiểm thử được không cần mạng.
 """
 from __future__ import annotations
 
-from .classify import classify
+from .checklist import check_completeness
+from .classify import classify, load_rules
 from .models import AnalysisReport, AnalyzedItem, ExtractionResult, Profile
 from .ruler import load_data
 from .suggest import suggest
@@ -29,11 +30,13 @@ def build_report(extraction: ExtractionResult, profile: Profile) -> AnalysisRepo
         for it in items
         if it.loban.near_border and it.loban.border_note
     ]
+    missing = check_completeness(list(extraction.dimensions), load_rules())
     return AnalysisReport(
         profile=profile,
         data_version=load_data()["version"],
         items=items,
         need_confirm=confirm,
         near_border=near,
+        missing=missing,
         warnings=[MANDATORY_WARNING],
     )

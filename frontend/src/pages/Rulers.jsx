@@ -7,18 +7,16 @@ import RulerStrip from "../components/RulerStrip.jsx";
 import styles from "./Rulers.module.css";
 
 const ORDER = ["52.2", "42.9", "38.8"];
-const CATS = [
-  ["mo", "Mộ"],
-  ["cong", "Cổng / rào / cuốn thư"],
-  ["loi_di", "Lối đi / bậc tam cấp"],
-  ["khoang_cach", "Khoảng cách"],
-  ["lang_tho", "Lăng thờ"],
-  ["mat_bang", "Mặt bằng khu"],
-];
+const PX_PER_MM = 6;            // px/mm cho track
+const MAX_CYCLE = 522;
+// mỗi thước 1 màu chỉ báo riêng (không gộp chung)
+const COLORS = { "52.2": "#2563eb", "42.9": "#16a34a", "38.8": "#dc2626" };
 
 export default function Rulers() {
   const { data, isLoading, error } = useQuery({ queryKey: ["rulers"], queryFn: getRulers });
   const [value, setValue] = useState(63);
+
+  const spanMm = Math.max(value + MAX_CYCLE, 2 * MAX_CYCLE);
 
   return (
     <section className={`container ${styles.page}`}>
@@ -41,7 +39,15 @@ export default function Rulers() {
       {data &&
         ORDER.map((key) =>
           data.rulers[key] ? (
-            <RulerStrip key={key} rulerKey={key} ruler={data.rulers[key]} value={value} />
+            <RulerStrip
+              key={key}
+              rulerKey={key}
+              ruler={data.rulers[key]}
+              value={value}
+              pxPerMm={PX_PER_MM}
+              spanMm={spanMm}
+              color={COLORS[key] || "#f59e0b"}
+            />
           ) : null,
         )}
 
@@ -50,11 +56,40 @@ export default function Rulers() {
   );
 }
 
+const RULER_OPTS = [
+  ["38.8", "38.8cm (âm phần)"],
+  ["42.9", "42.9cm (dương trạch)"],
+  ["52.2", "52.2cm (thông thủy)"],
+];
+function RuleSelect({ value, defaultRuler, onChange }) {
+  return (
+    <select className={styles.select} value={value || ""} onChange={(e) => onChange(e.target.value)}>
+      <option value="">Mặc định ({defaultRuler}cm)</option>
+      {RULER_OPTS.map(([v, lb]) => (
+        <option key={v} value={v}>{lb}</option>
+      ))}
+    </select>
+  );
+}
+
+// tên hạng mục -> key ascii (Gemini dùng key): bỏ dấu, thường hóa, non-alnum -> _
+function slugify(s) {
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[đĐ]/g, "d")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 function RuleEditor() {
   const { data } = useQuery({ queryKey: ["rules"], queryFn: getRules });
   const [cfg, setCfg] = useState(null);
   const [saved, setSaved] = useState(false);
   const [err, setErr] = useState(null);
+  const [newLabel, setNewLabel] = useState("");
+  const [newRuler, setNewRuler] = useState("38.8");
 
   useEffect(() => {
     if (data) setCfg(structuredClone(data));
@@ -62,11 +97,41 @@ function RuleEditor() {
 
   if (!cfg) return null;
 
-  function setCat(cat, ruler) {
+  const cats = cfg.categories || [];
+
+  function setRuler(key, ruler) {
     const map = { ...cfg.category_ruler };
-    if (ruler === "") delete map[cat];
-    else map[cat] = ruler;
+    if (ruler === "") delete map[key];
+    else map[key] = ruler;
     setCfg({ ...cfg, category_ruler: map });
+    setSaved(false);
+  }
+
+  function addCat() {
+    const label = newLabel.trim();
+    if (!label) return;
+    const key = slugify(label) || `hm_${Date.now()}`;
+    if (cats.some((c) => c.key === key)) {
+      setErr(`Hạng mục "${key}" đã tồn tại`);
+      return;
+    }
+    const categories = [...cats, { key, label }];
+    const category_ruler = { ...cfg.category_ruler };
+    if (newRuler) category_ruler[key] = newRuler;
+    setCfg({ ...cfg, categories, category_ruler });
+    setNewLabel("");
+    setErr(null);
+    setSaved(false);
+  }
+
+  function deleteCat(key) {
+    const categories = cats.filter((c) => c.key !== key);
+    const category_ruler = { ...cfg.category_ruler };
+    delete category_ruler[key];
+    // giữ nguyên checklist trong cfg (cấu hình ở data file), chỉ bỏ nhánh hạng mục đã xóa
+    const checklist = { ...(cfg.checklist || {}) };
+    delete checklist[key];
+    setCfg({ ...cfg, categories, category_ruler, checklist });
     setSaved(false);
   }
 
@@ -85,27 +150,49 @@ function RuleEditor() {
     <Card variant="feature" className={styles.editor}>
       <h3>Cấu hình thước theo hạng mục</h3>
       <p className={styles.note}>
-        Gán thước cho từng hạng mục. "Mặc định" = thước {cfg.default_ruler}cm. Riêng
-        kích thước đo <strong>thông thủy</strong> (khe đi lọt giữa 2 cột cổng) luôn dùng{" "}
-        {cfg.thong_thuy_ruler}cm.
+        Gán thước cho từng hạng mục, thêm hoặc xóa hạng mục. "Mặc định" = thước{" "}
+        {cfg.default_ruler}cm. Riêng kích thước đo <strong>thông thủy</strong> (khe đi lọt giữa
+        2 cột cổng) luôn dùng {cfg.thong_thuy_ruler}cm.
       </p>
       <div className={styles.rows}>
-        {CATS.map(([cat, label]) => (
-          <label key={cat} className={styles.ruleRow}>
-            <span>{label}</span>
-            <select
-              className={styles.select}
-              value={cfg.category_ruler[cat] || ""}
-              onChange={(e) => setCat(cat, e.target.value)}
-            >
-              <option value="">Mặc định ({cfg.default_ruler}cm)</option>
-              <option value="38.8">38.8cm (âm phần)</option>
-              <option value="42.9">42.9cm (dương trạch)</option>
-              <option value="52.2">52.2cm (thông thủy)</option>
-            </select>
+        {cats.map((c) => (
+          <label key={c.key} className={styles.ruleRow}>
+            <span>
+              {c.label}{" "}
+              <button
+                type="button"
+                className={styles.remove}
+                onClick={() => deleteCat(c.key)}
+                title="Xóa hạng mục"
+              >
+                ×
+              </button>
+            </span>
+            <RuleSelect
+              value={cfg.category_ruler[c.key]}
+              defaultRuler={cfg.default_ruler}
+              onChange={(r) => setRuler(c.key, r)}
+            />
           </label>
         ))}
       </div>
+
+      <div className={styles.addRow}>
+        <input
+          className={styles.newCat}
+          placeholder="Tên hạng mục mới…"
+          value={newLabel}
+          onChange={(e) => setNewLabel(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addCat()}
+        />
+        <select className={styles.select} value={newRuler} onChange={(e) => setNewRuler(e.target.value)}>
+          {RULER_OPTS.map(([v, lb]) => (
+            <option key={v} value={v}>{lb}</option>
+          ))}
+        </select>
+        <Button variant="secondary" onClick={addCat}>+ Thêm hạng mục</Button>
+      </div>
+
       <div className={styles.saveRow}>
         <Button onClick={save}>Lưu cấu hình</Button>
         {saved && <span className={styles.ok}>Đã lưu ✓</span>}

@@ -108,7 +108,8 @@ def _process(ho_so: str) -> None:
     jobs.set_status(ho_so, "extract")
     t = time.perf_counter()
     images = load_inputs(jobs.input_paths(job))
-    extraction = extract(images, job.note, light=job.light)
+    note_text = "\n".join(t.strip() for t in (job.note, job.cau_hoi) if t and t.strip())
+    extraction = extract(images, note_text, light=job.light)
     log.info("[%s] extract (Gemini, %d ảnh) %.2fs -> %d kích thước",
              ho_so, len(images), time.perf_counter() - t, len(extraction.dimensions))
 

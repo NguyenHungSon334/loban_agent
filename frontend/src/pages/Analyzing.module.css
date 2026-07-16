@@ -47,6 +47,11 @@
 .err {
   color: var(--color-error);
 }
+.errActions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
 @keyframes pulse {
   50% {
     opacity: 0.4;

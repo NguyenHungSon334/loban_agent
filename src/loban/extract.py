@@ -18,7 +18,17 @@ _PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_system.md"
 
 
 def _system_prompt() -> str:
-    return _PROMPT_PATH.read_text(encoding="utf-8")
+    base = _PROMPT_PATH.read_text(encoding="utf-8")
+    from .classify import load_rules
+    from .models import KNOWN_CATEGORIES
+
+    cfg = load_rules()
+    # danh sách hạng mục cấu hình được (kèm nhãn) -> để Gemini chọn đúng key.
+    cats = cfg.get("categories") or [{"key": k} for k in KNOWN_CATEGORIES]
+    lines = [f"- {c['key']}: {c.get('label', c['key'])}" for c in cats if c.get("key")]
+    if lines:
+        base += "\n\n# Hạng mục khả dụng (dùng ĐÚNG key bên trái)\n" + "\n".join(lines)
+    return base
 
 
 def _build_client(api_key: str | None):
@@ -39,8 +49,8 @@ def extract(
     api_key: str | None = None,
 ) -> ExtractionResult:
     """Bóc tách kích thước từ ảnh. `light=True` dùng model flash (rẻ hơn)."""
-    if not images:
-        raise ValueError("Không có ảnh đầu vào.")
+    if not images and not employee_note.strip():
+        raise ValueError("Không có ảnh và không có số đo đầu vào.")
 
     from google.genai import types  # lazy
 
@@ -49,12 +59,22 @@ def extract(
     model = settings.model_extract_light if light else settings.model_extract
 
     contents: list = [types.Part.from_bytes(data=data, mime_type=mime) for data, mime in images]
-    user_text = "Bóc tách toàn bộ kích thước nhìn thấy rõ theo schema."
-    if employee_note.strip():
-        user_text += f"\n\nGhi chú nhân viên nhập (nguồn ưu tiên 3):\n{employee_note.strip()}"
+    if images:
+        user_text = "Bóc tách toàn bộ kích thước nhìn thấy rõ theo schema."
+        if employee_note.strip():
+            user_text += f"\n\nGhi chú nhân viên nhập (nguồn ưu tiên 3):\n{employee_note.strip()}"
+    else:
+        # Không có ảnh -> bóc tách từ mô tả số đo người dùng nhập.
+        user_text = (
+            "Không có ảnh bản vẽ. Bóc tách kích thước từ mô tả số đo dưới đây "
+            f"theo schema:\n{employee_note.strip()}"
+        )
     contents.append(user_text)
 
-    resp = client.models.generate_content(
+    from .genai_retry import generate_with_retry
+
+    resp = generate_with_retry(
+        client,
         model=model,
         contents=contents,
         config=types.GenerateContentConfig(

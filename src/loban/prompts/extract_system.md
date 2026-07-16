@@ -26,7 +26,7 @@ Chỉ bóc tách các kích thước NHÌN THẤY RÕ trên bản vẽ/ảnh. Tr
 Lưu ý: KHÔNG lấy kích thước phủ bì cổng thay cho thông thủy cổng.
 
 # Hạng mục (category)
-mo, cong, loi_di, khoang_cach, lang_tho, mat_bang.
+Chọn 1 key trong danh sách "Hạng mục khả dụng" ở cuối prompt (dùng đúng key, không tự đặt tên khác).
 
 # Mỗi kích thước phải gán
 - label: mô tả ngắn tiếng Việt (VD "Chiều rộng phủ bì mộ", "Lọt lòng cổng").
@@ -36,6 +36,17 @@ mo, cong, loi_di, khoang_cach, lang_tho, mat_bang.
 - confidence: cao (ghi trực tiếp, rõ) | trung_binh (suy theo tỷ lệ/mốc) | thap (ảnh mờ, số bị che, mâu thuẫn) | chua_xac_dinh (không đủ cơ sở).
 - need_confirm: true nếu confidence là thap/chua_xac_dinh, hoặc số có mâu thuẫn.
 - estimated: true nếu suy theo tỷ lệ.
+
+# Danh sách SĂN TÌM theo hạng mục (bóc nếu bản vẽ có — đừng bỏ sót)
+Ưu tiên kích thước phủ bì chính, thông thủy, thân cấu kiện quan trọng và khoảng cách
+bố trí. KHÔNG cần ép từng chi tiết hoa văn nhỏ.
+- Long đình / lăng thờ (long_dinh, lang_tho): ngang, sâu, cao tổng thể; gian thờ; thông thủy gian thờ.
+- Cổng đá & cột (cong): cao cột; cao tổng thể cổng; thông thủy lối đi (lọt lòng); cao thông thủy cổng; bậc/ngưỡng cổng.
+- Hàng rào / lan can (hang_rao): cao tổng thể; cao trụ.
+- Mộ đá (mo) — chi tiết nhất: dài/rộng/cao phủ bì; thân mộ; lỗ thông thiên (dài+rộng); ô chờ phía dưới (dài+rộng); ô kim tinh; khoang đặt tiểu/quan tài.
+- Trấn phong / cuốn thư (tran_phong): ngang tổng thể; cao tổng thể; rộng thân.
+- Khoảng cách bố trí (khoang_cach): cổng–trấn phong; trấn phong–mộ; mộ–lăng thờ; giữa các mộ; công trình–hàng rào; rộng lối đi; khoảng lùi thi công.
+Mỗi trục (dài, rộng, cao) là MỘT mục riêng — ghi rõ trong label (VD "Chiều cao phủ bì mộ").
 
 # Nguyên tắc
 - Thà bỏ trống (value_mm=null, need_confirm=true) còn hơn đoán sai.

@@ -7,6 +7,7 @@ import Badge from "../components/Badge.jsx";
 import Button from "../components/Button.jsx";
 import Card from "../components/Card.jsx";
 import DimensionTable from "../components/DimensionTable.jsx";
+import FloatingChat from "../components/FloatingChat.jsx";
 import styles from "./Report.module.css";
 
 // file: tải 1 file · bundle: zip nhiều trang cùng loại
@@ -79,7 +80,7 @@ export default function Report() {
   if (error) return <Center>Lỗi tải báo cáo: {error.message}</Center>;
   if (!data) return null;
 
-  const { profile, items = [], need_confirm = [], near_border = [], warnings = [] } = data;
+  const { profile, items = [], need_confirm = [], near_border = [], missing = [], warnings = [] } = data;
 
   return (
     <section className={`container ${styles.page}`}>
@@ -120,11 +121,16 @@ export default function Report() {
         <DimensionTable items={items} onConfirm={onConfirm} busyIndex={busyIndex} />
       </Card>
 
-      {(need_confirm.length > 0 || near_border.length > 0) && (
+      {(need_confirm.length > 0 || near_border.length > 0 || missing.length > 0) && (
         <Card variant="feature" className={styles.callout}>
           {need_confirm.length > 0 && (
             <div>
               <strong>Cần xác nhận:</strong> {need_confirm.join(", ")}
+            </div>
+          )}
+          {missing.length > 0 && (
+            <div className={styles.warnLine}>
+              <strong>Thiếu / cần đo bổ sung:</strong> {missing.join(", ")}
             </div>
           )}
           {near_border.map((n, i) => (
@@ -140,6 +146,12 @@ export default function Report() {
           {w}
         </p>
       ))}
+
+      <FloatingChat
+        hoSo={hoSo}
+        onReply={() => queryClient.invalidateQueries({ queryKey: ["report", hoSo] })}
+        placeholder='Ví dụ: "Kích thước nào chưa đẹp?", "Đổi cổng thành 1m2"'
+      />
     </section>
   );
 }
