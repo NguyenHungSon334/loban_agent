@@ -10,11 +10,19 @@ RUN npm run build          # -> /fe/dist
 FROM python:3.11-slim
 WORKDIR /app
 
-# editable install: giữ package tại /app/src/loban để build.py/ruler.py tính đúng
-# đường dẫn assests/ data/ frontend/dist theo __file__ (parents[...]).
+# ưu tiên wheel dựng sẵn -> khỏi biên dịch nguồn (chậm/OOM trên e2-micro)
+ENV PIP_PREFER_BINARY=1 PIP_NO_CACHE_DIR=1
+
+# Cài DEPS trước, chỉ phụ thuộc pyproject.toml -> lớp này được cache lại,
+# đổi code trong src/ KHÔNG bắt cài lại deps (tránh 36 phút mỗi deploy).
 COPY pyproject.toml ./
+RUN python -c "import tomllib; d=tomllib.load(open('pyproject.toml','rb')); open('/tmp/reqs.txt','w').write('\n'.join(d['project']['dependencies']))" \
+    && pip install -r /tmp/reqs.txt
+
+# editable install (link package, không cài lại deps) -> nhanh, chạy mỗi khi đổi src.
+# giữ package tại /app/src/loban để build.py/ruler.py tính đúng đường dẫn theo __file__.
 COPY src/ ./src/
-RUN pip install --no-cache-dir -e .
+RUN pip install --no-deps -e .
 
 COPY data/ ./data/
 COPY assests/ ./assests/
