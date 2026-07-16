@@ -16,8 +16,6 @@ from ..ingest import load_inputs
 from ..models import AnalysisReport
 from ..pipeline import build_report
 from ..render.analysis_json import write_analysis
-from ..render.pdf_report import write_pdf
-from ..render.png import write_png
 from .db import AnalysisJob
 from . import jobs
 from .deps import settings
@@ -82,18 +80,10 @@ def _drawing_bytes(job: AnalysisJob) -> bytes | None:
     return images[0][0] if images else None
 
 
-def write_outputs(report: AnalysisReport, job: AnalysisJob, drawing: bytes | None) -> None:
-    """Ghi 3 đầu ra theo cờ hồ sơ. Dùng chung cho chạy mới + xác nhận/tính lại."""
-    out_dir = settings().output_dir / job.ho_so
-    write_analysis(report, out_dir)
-    if job.png:
-        t = time.perf_counter()
-        write_png(report, out_dir, drawing)
-        log.info("[%s] render PNG %.2fs", job.ho_so, time.perf_counter() - t)
-    if job.pdf:
-        t = time.perf_counter()
-        write_pdf(report, out_dir, drawing)
-        log.info("[%s] render PDF %.2fs", job.ho_so, time.perf_counter() - t)
+def write_outputs(report: AnalysisReport, job: AnalysisJob, drawing: bytes | None = None) -> None:
+    """Chỉ ghi analysis.json. PNG/PDF render ON-DEMAND khi bấm tải ở từng hồ sơ
+    (endpoint /api/report/{ho_so}/export) -> job chạy nhẹ, không tốn render thừa."""
+    write_analysis(report, settings().output_dir / job.ho_so)
 
 
 def _process(ho_so: str) -> None:

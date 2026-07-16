@@ -110,3 +110,19 @@ export async function downloadBundle(hoSo, kind) {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   await saveBlob(await res.blob(), `${hoSo}_${kind}.zip`);
 }
+
+// Render + tải PNG/PDF ON-DEMAND (server dựng lúc bấm), loại các item bỏ tích.
+// kind: "pdf" -> file .pdf; "png" -> zip nhiều trang.
+export async function exportReport(hoSo, kind, exclude = []) {
+  const res = await fetch(`/api/report/${encodeURIComponent(hoSo)}/export`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind, exclude }),
+  });
+  if (!res.ok) {
+    const d = await res.json().catch(() => ({}));
+    throw new Error(d.detail || `HTTP ${res.status}`);
+  }
+  const name = kind === "pdf" ? `${hoSo}.pdf` : `${hoSo}_png.zip`;
+  await saveBlob(await res.blob(), name);
+}

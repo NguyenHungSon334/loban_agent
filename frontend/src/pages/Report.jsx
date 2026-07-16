@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useReport } from "../hooks/useReport.js";
-import { confirmDim, deleteHoSo, downloadBundle, downloadFile, retryJob } from "../api/client.js";
+import { confirmDim, deleteHoSo, downloadFile, exportReport, retryJob } from "../api/client.js";
 import Badge from "../components/Badge.jsx";
 import Button from "../components/Button.jsx";
 import Card from "../components/Card.jsx";
@@ -10,11 +10,11 @@ import DimensionTable from "../components/DimensionTable.jsx";
 import FloatingChat from "../components/FloatingChat.jsx";
 import styles from "./Report.module.css";
 
-// file: tải 1 file · bundle: zip nhiều trang cùng loại
+// file: tải file có sẵn · export: render on-demand (PNG/PDF) loại item bỏ tích
 const DOWNLOADS = [
   { key: "json", label: "Tải JSON", file: "analysis.json" },
-  { key: "png", label: "Tải PNG (full)", bundle: "png" },
-  { key: "pdf", label: "Tải PDF A4", file: "report.pdf" },
+  { key: "png", label: "Tải ảnh (PNG)", export: "png" },
+  { key: "pdf", label: "Tải PDF A4", export: "pdf" },
 ];
 
 export default function Report() {
@@ -26,12 +26,21 @@ export default function Report() {
   const [action, setAction] = useState(null); // 'retry' | 'delete'
   const [dl, setDl] = useState(null); // tên file đang tải
   const [err, setErr] = useState(null);
+  const [excluded, setExcluded] = useState(() => new Set()); // index không xuất bản in
+
+  function toggleExclude(i) {
+    setExcluded((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  }
 
   async function onDownload(item) {
     setDl(item.key);
     setErr(null);
     try {
-      if (item.bundle) await downloadBundle(hoSo, item.bundle);
+      if (item.export) await exportReport(hoSo, item.export, [...excluded]);
       else await downloadFile(hoSo, item.file);
     } catch (e) {
       setErr(`Tải ${item.label} lỗi: ${e.message}`);
@@ -103,7 +112,11 @@ export default function Report() {
             onClick={() => onDownload(item)}
             disabled={dl !== null}
           >
-            {dl === item.key ? "Đang tải…" : item.label}
+            {dl === item.key
+              ? item.export
+                ? "Đang xử lý…"
+                : "Đang tải…"
+              : item.label}
           </Button>
         ))}
         <span className={styles.spacer} />
@@ -117,8 +130,17 @@ export default function Report() {
 
       {err && <p className={styles.err}>{err}</p>}
 
+      <p className={styles.exportHint}>
+        Bỏ tick ở cột <strong>Xuất</strong> để loại dòng đó khỏi PNG/PDF khi tải.
+      </p>
       <Card variant="product" className={styles.tableCard}>
-        <DimensionTable items={items} onConfirm={onConfirm} busyIndex={busyIndex} />
+        <DimensionTable
+          items={items}
+          onConfirm={onConfirm}
+          busyIndex={busyIndex}
+          excluded={excluded}
+          onToggleExclude={toggleExclude}
+        />
       </Card>
 
       {(need_confirm.length > 0 || near_border.length > 0 || missing.length > 0) && (

@@ -7,19 +7,12 @@ import Card from "../components/Card.jsx";
 import TextInput from "../components/TextInput.jsx";
 import styles from "./NewAnalysis.module.css";
 
-const FLAG_LABELS = { png: "Xuất PNG", pdf: "Xuất PDF A4" };
-
 export default function NewAnalysis() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [files, setFiles] = useState([]);
-  const [flags, setFlags] = useState({ png: true, pdf: true });
   const [err, setErr] = useState(null);
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
-
-  function toggle(k) {
-    setFlags((f) => ({ ...f, [k]: !f[k] }));
-  }
 
   async function onSubmit(v) {
     if (!files.length && !v.cau_hoi?.trim()) {
@@ -33,7 +26,6 @@ export default function NewAnalysis() {
     for (const k of ["khach_hang", "dia_diem", "huong_cong", "vat_lieu", "note", "cau_hoi"]) {
       if (v[k]) fd.append(k, v[k]);
     }
-    for (const k of ["png", "pdf"]) fd.append(k, flags[k]);
     for (const f of files) fd.append("files", f);
     try {
       const r = await analyze(fd);
@@ -113,19 +105,6 @@ export default function NewAnalysis() {
             multiline
             {...register("note")}
           />
-
-          <div className={styles.flags}>
-            {Object.keys(FLAG_LABELS).map((k) => (
-              <button
-                key={k}
-                type="button"
-                onClick={() => toggle(k)}
-                className={`${styles.pill} ${flags[k] ? styles.pillOn : ""}`}
-              >
-                {FLAG_LABELS[k]}
-              </button>
-            ))}
-          </div>
 
           {err && <p className={styles.err}>{err}</p>}
 

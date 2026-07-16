@@ -44,6 +44,16 @@
 .unusable {
   opacity: 0.55;
 }
+.exportCell {
+  text-align: center !important;
+  width: 46px;
+}
+.exportCell input {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
 .confirmBox {
   display: flex;
   gap: 6px;

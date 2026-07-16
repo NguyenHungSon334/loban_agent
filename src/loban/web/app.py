@@ -317,7 +317,7 @@ def apply_dimension_edit(ho_so: str, index: int, value_mm: float | None) -> dict
     d.estimated = False
 
     new = build_report(ExtractionResult(dimensions=dims), report.profile)
-    worker.write_outputs(new, job, worker._drawing_bytes(job))
+    worker.write_outputs(new, job)   # chỉ ghi JSON; PNG/PDF render on-demand
     jobs.set_status(ho_so, "done", n_dim=len(new.items))
     return json.loads(f.read_text(encoding="utf-8"))
 
@@ -336,6 +336,58 @@ def confirm(ho_so: str, payload: ConfirmIn):
         raise HTTPException(404, str(e))
     except ValueError as e:
         raise HTTPException(422, str(e))
+
+
+class ExportIn(BaseModel):
+    kind: str                          # "pdf" | "png"
+    exclude: list[int] = []            # index item KHÔNG xuất ra bản in
+
+
+def _load_report_filtered(ho_so: str, exclude: list[int]) -> AnalysisReport:
+    ho_so = Path(ho_so).name
+    f = settings().output_dir / ho_so / "analysis.json"
+    if not f.exists():
+        raise HTTPException(404, "Chưa có kết quả")
+    report = AnalysisReport.model_validate_json(f.read_text(encoding="utf-8"))
+    if exclude:
+        ex = set(exclude)
+        keep = [it for i, it in enumerate(report.items) if i not in ex]
+        report = report.model_copy(update={"items": keep})
+    return report
+
+
+@app.post("/api/report/{ho_so}/export")
+def export_report(ho_so: str, payload: ExportIn):
+    """Render PNG/PDF ON-DEMAND (khi bấm tải), loại các item bỏ tích. def sync ->
+    FastAPI chạy threadpool, không chẹn event loop."""
+    report = _load_report_filtered(ho_so, payload.exclude)
+    name = Path(ho_so).name
+    if payload.kind == "pdf":
+        from ..render.build import build_report_pdf
+
+        data = build_report_pdf(report)
+        return Response(
+            content=data, media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="{name}.pdf"'},
+        )
+    if payload.kind == "png":
+        import fitz  # PyMuPDF
+
+        from ..render.build import build_png_pdf
+
+        pdf_bytes = build_png_pdf(report)
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+                for i, page in enumerate(doc, start=1):
+                    zoom = 1080 / page.rect.width          # ảnh rộng 1080px (4:5)
+                    pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom))
+                    z.writestr(f"png_{i}.png", pix.tobytes("png"))
+        return Response(
+            content=buf.getvalue(), media_type="application/zip",
+            headers={"Content-Disposition": f'attachment; filename="{name}_png.zip"'},
+        )
+    raise HTTPException(422, "kind phải là 'pdf' hoặc 'png'")
 
 
 @app.post("/api/jobs/{ho_so}/retry")

@@ -54,12 +54,16 @@ function ConfirmControl({ item, index, onConfirm, busy }) {
 }
 
 // onConfirm(index, valueMm) — nếu truyền, dòng "cần xác nhận" hiện ô nhập + nút.
-export default function DimensionTable({ items = [], onConfirm, busyIndex }) {
+// excluded (Set) + onToggleExclude(index) — nếu truyền, hiện cột "Xuất" tick chọn
+// item nào ĐƯỢC xuất ra PNG/PDF (bỏ tick = loại khỏi bản in).
+export default function DimensionTable({ items = [], onConfirm, busyIndex, excluded, onToggleExclude }) {
+  const showExport = typeof onToggleExclude === "function";
   return (
     <div className={styles.wrap}>
       <table className={styles.table}>
         <thead>
           <tr>
+            {showExport && <th title="Tick = xuất ra PNG/PDF">Xuất</th>}
             <th>Kích thước</th>
             <th>Giá trị</th>
             <th>Thước</th>
@@ -70,6 +74,16 @@ export default function DimensionTable({ items = [], onConfirm, busyIndex }) {
         <tbody>
           {items.map((it, i) => (
             <tr key={i} className={it.usable ? "" : styles.unusable}>
+              {showExport && (
+                <td className={styles.exportCell}>
+                  <input
+                    type="checkbox"
+                    checked={!excluded?.has(i)}
+                    onChange={() => onToggleExclude(i)}
+                    aria-label="Xuất dòng này"
+                  />
+                </td>
+              )}
               <td>
                 {it.dimension.label}
                 {it.dimension.need_confirm && (
