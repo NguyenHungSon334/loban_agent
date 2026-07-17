@@ -13,7 +13,7 @@ class WebSettings(BaseSettings):
     )
     output_dir: Path = Path("output")     # mỗi hồ sơ 1 thư mục con
     db_url: str = "sqlite:///web.db"       # SQLite — 1 VPS, không Redis
-    worker_concurrency: int = 3            # số job nặng chạy song song; khớp RAM VPS
+    worker_concurrency: int = 1            # số job nặng chạy song song; khớp RAM VPS (free tier -> 1)
 
 
 @lru_cache

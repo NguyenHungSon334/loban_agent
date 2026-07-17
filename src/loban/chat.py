@@ -11,6 +11,7 @@ from .ingest import ImagePart
 from .ruler import RulerKey, lookup
 
 _RULERS: tuple[RulerKey, ...] = ("38.8", "42.9", "52.2")
+_GENAI_TIMEOUT_MS = 120_000  # 2 phút/call; call treo -> fail thay vì kẹt mãi
 
 
 def tra_cung(value_mm: float, ruler: str) -> dict:
@@ -67,7 +68,8 @@ def chat(message: str, images: list[ImagePart] | None = None,
     if client is None:
         if not s.gemini_api_key:
             raise RuntimeError("Thiếu GEMINI API key (LOBAN_GEMINI_API_KEY).")
-        client = genai.Client(api_key=s.gemini_api_key)
+        client = genai.Client(api_key=s.gemini_api_key,
+                              http_options={"timeout": _GENAI_TIMEOUT_MS})
 
     text = message.strip()
     if not text and not images:

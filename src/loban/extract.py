@@ -15,6 +15,7 @@ from .ingest import ImagePart
 from .models import ExtractionResult
 
 _PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_system.md"
+_GENAI_TIMEOUT_MS = 120_000  # 2 phút/call; call treo -> fail để consumer worker chạy tiếp job sau
 
 
 def _system_prompt() -> str:
@@ -37,7 +38,8 @@ def _build_client(api_key: str | None):
     key = api_key or get_settings().gemini_api_key
     if not key:
         raise RuntimeError("Thiếu GEMINI API key. Đặt LOBAN_GEMINI_API_KEY trong .env.")
-    return genai.Client(api_key=key)
+    # timeout để 1 call treo (network stall) không wedge consumer worker mãi mãi.
+    return genai.Client(api_key=key, http_options={"timeout": _GENAI_TIMEOUT_MS})
 
 
 def extract(
