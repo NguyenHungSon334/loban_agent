@@ -8,13 +8,12 @@ def test_tra_cung_mo():
     assert r["cung_nho"] == "Hỷ sự"
 
 
-def test_tra_cung_thong_thuy():
-    r = tra_cung(2060, "52.2")         # lọt lòng cổng
-    assert r["cung"] == "Tể Tướng" and r["tot"] is True
-
-
-def test_tra_cung_ruler_sai():
-    assert "loi" in tra_cung(500, "99.9")
+def test_tra_cung_forces_388():
+    # override: mọi ruler arg bị bỏ qua, luôn tính thước 38.8
+    r = tra_cung(2060, "52.2")
+    assert r["thuoc"] == "38.8"
+    r2 = tra_cung(2060, "99.9")
+    assert r2["thuoc"] == "38.8" and "loi" not in r2
 
 
 def test_match_label():

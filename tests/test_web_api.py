@@ -177,7 +177,7 @@ def test_rules_put_affects_classify(client):
     }
     assert client.put("/api/rules", json=cfg).status_code == 200
     from loban.classify import ruler_for
-    assert ruler_for("mo", "phu_bi") == "52.2"      # rule mới có hiệu lực ngay
+    assert ruler_for("mo", "phu_bi") == "38.8"      # override: rule không đổi được thước nữa
 
 
 def test_rules_put_invalid(client):

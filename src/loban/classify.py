@@ -84,22 +84,13 @@ def save_rules(cfg: dict) -> dict:
 
 
 def ruler_for(category: str, kind: str) -> RulerKey:
-    cfg = load_rules()
-    ck_map = cfg.get("category_kind_ruler", {})
-    if f"{category}.{kind}" in ck_map:
-        return ck_map[f"{category}.{kind}"]
-    cat_map = cfg.get("category_ruler", {})
-    if category in cat_map:
-        return cat_map[category]
-    if kind == "thong_thuy" and cfg.get("thong_thuy_ruler"):
-        return cfg["thong_thuy_ruler"]
-    return cfg["default_ruler"]
+    # D2c bị override: mọi hạng mục tính bằng thước 38.8, không dùng thước khác.
+    return "38.8"
 
 
 def _cross_for(category: str, kind: str, primary: RulerKey) -> RulerKey | None:
-    """Thước phụ đối chiếu thêm (khác thước chính). None nếu không cấu hình."""
-    r = load_rules().get("cross_ruler", {}).get(f"{category}.{kind}")
-    return r if r and r != primary else None
+    """Thước phụ đối chiếu thêm — tắt: chỉ dùng thước 38.8."""
+    return None
 
 
 def classify(dim: Dimension) -> LobanResult:

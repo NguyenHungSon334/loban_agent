@@ -28,7 +28,7 @@ def test_report_structure():
     by_label = {it.dimension.label: it for it in r.items}
     assert by_label["Rộng mộ"].loban.status == "tot"
     assert by_label["Rộng mộ"].usable is True
-    assert by_label["Lối đi"].loban.status == "chua_phu_hop"
+    assert by_label["Lối đi"].loban.status == "tot"   # 160 trên 38.8 -> Nghĩa (tốt)
     assert by_label["Lối đi"].suggestion is not None
     assert by_label["Cổng mờ"].usable is False       # tin cậy thấp
     assert by_label["Cao lăng"].usable is False       # thiếu số

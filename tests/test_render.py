@@ -35,11 +35,11 @@ def _pages_text(pdf_bytes):
         return [" ".join(p.get_text().split()) for p in doc]
 
 
-def test_png_groups_by_three_rulers():
-    # layout mới: 1 bảng gộp, 3 hàng nhóm thước A/B/C (38,8 · 52,2 · 42,9)
+def test_png_groups_single_ruler_388():
+    # override: mọi kích thước tính thước 38.8 -> chỉ còn nhóm Âm phần
     text = " ".join(_pages_text(build_png_pdf(_report(n=2))))
-    assert "38,8 cm" in text and "52,2 cm" in text and "42,9 cm" in text
-    assert "Âm phần" in text and "Thông thủy" in text and "Dương trạch" in text
+    assert "38,8 cm" in text and "Âm phần" in text
+    assert "52,2 cm" not in text and "42,9 cm" not in text
 
 
 def test_png_content_present():

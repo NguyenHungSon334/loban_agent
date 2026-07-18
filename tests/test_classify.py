@@ -7,22 +7,15 @@ def _dim(category, kind, value=None):
 
 
 def test_mapping_ruler():
-    # D2c: lăng thờ tổng thể -> 42.9 · thông thủy/lối đi -> 52.2 · còn lại -> 38.8
-    assert ruler_for("mo", "phu_bi") == "38.8"            # mộ
-    assert ruler_for("mo", "lot_long") == "38.8"          # lọt lòng quan tài
-    assert ruler_for("lang_tho", "khoi") == "38.8"        # lăng khối đặc
-    assert ruler_for("lang_tho", "hop_tho") == "38.8"     # hộp thờ/bài vị
-    assert ruler_for("cong", "phu_bi") == "38.8"          # khối cổng (rào/cuốn thư tương tự)
-    assert ruler_for("mat_bang", "tong_the") == "38.8"
-    assert ruler_for("khoang_cach", "phu_bi") == "38.8"
-    # khe thông thủy giữa 2 cột cổng -> 52.2
-    assert ruler_for("cong", "thong_thuy") == "52.2"
-    assert ruler_for("khoang_cach", "thong_thuy") == "52.2"
-    # lăng thờ tổng thể (dài/rộng khối) -> 42.9 (ưu tiên trước mọi rule)
-    assert ruler_for("lang_tho", "tong_the") == "42.9"
-    # lối đi -> 52.2 thông thủy (2 biên giới hạn), mọi kind
-    assert ruler_for("loi_di", "thong_thuy") == "52.2"
-    assert ruler_for("loi_di", "phu_bi") == "52.2"
+    # Override: MỌI hạng mục/kind -> thước 38.8, không dùng thước khác.
+    for cat, kind in [
+        ("mo", "phu_bi"), ("mo", "lot_long"), ("lang_tho", "khoi"),
+        ("lang_tho", "hop_tho"), ("cong", "phu_bi"), ("mat_bang", "tong_the"),
+        ("khoang_cach", "phu_bi"), ("cong", "thong_thuy"),
+        ("khoang_cach", "thong_thuy"), ("lang_tho", "tong_the"),
+        ("loi_di", "thong_thuy"), ("loi_di", "phu_bi"),
+    ]:
+        assert ruler_for(cat, kind) == "38.8"
 
 
 def test_classify_tot():
@@ -33,7 +26,8 @@ def test_classify_tot():
 
 
 def test_classify_chua_phu_hop():
-    r = classify(_dim("cong", "thong_thuy", 610))  # 52.2 -> Hiểm Họa xấu
+    r = classify(_dim("cong", "thong_thuy", 150))  # 38.8 pos150 -> Khổ (xấu)
+    assert r.ruler == "38.8"
     assert r.status == "chua_phu_hop"
     assert r.cung_good is False
 
@@ -61,14 +55,11 @@ def test_classify_near_border_propagates():
     assert "Hại" in r.border_note
 
 
-def test_cong_thong_thuy_dual_ruler():
-    # cổng thông thủy: chính 52.2 + đối chiếu THÊM 38.8 (cross_ruler mặc định)
+def test_cong_thong_thuy_single_ruler():
+    # Override: cổng thông thủy nay cũng chỉ tính 38.8, không còn thước phụ.
     r = classify(_dim("cong", "thong_thuy", 810))
-    assert r.ruler == "52.2"
-    assert r.cross is not None
-    assert r.cross.ruler == "38.8"
-    assert r.cross.cung is not None
-    assert r.cross.status in ("tot", "chua_phu_hop")
+    assert r.ruler == "38.8"
+    assert r.cross is None
 
 
 def test_no_cross_for_normal_dim():

@@ -12,9 +12,9 @@ def _run(category, kind, value):
     return d, classify(d)
 
 
-def test_loi_di_uses_522_and_increase_note():
-    d, lb = _run("loi_di", "thong_thuy", 160)  # lối đi -> 52.2 thông thủy, xấu
-    assert lb.ruler == "52.2"
+def test_loi_di_uses_388_and_increase_note():
+    d, lb = _run("loi_di", "thong_thuy", 150)  # 38.8, Khổ (xấu); kind thong_thuy -> ưu tiên tăng
+    assert lb.ruler == "38.8"
     assert lb.status == "chua_phu_hop"
     s = suggest(d, lb)
     assert s.lower_mm is not None or s.upper_mm is not None
@@ -22,16 +22,16 @@ def test_loi_di_uses_522_and_increase_note():
 
 
 def test_tot_still_shows_alternative_and_dang_dat():
-    d, lb = _run("cong", "thong_thuy", 2060)   # Tể Tướng tốt
+    d, lb = _run("loi_di", "thong_thuy", 160)   # 38.8, Nghĩa tốt, có cung tốt khác ±50
     assert lb.status == "tot"
     s = suggest(d, lb)
-    assert s.lower_mm is None                   # xuống 50mm vẫn cùng cung
-    assert s.upper_mm == 2088 and s.upper_cung == "Quý Nhân"
-    assert "Đang đạt cung Tể Tướng" in s.note
+    assert s.lower_mm == 116 and s.lower_cung == "Vượng"
+    assert s.upper_mm == 194 and s.upper_cung == "Quan"
+    assert "Đang đạt cung Nghĩa" in s.note
 
 
 def test_no_option_needs_architect():
-    d, lb = _run("cong", "thong_thuy", 32)      # Quý Nhân, không cung tốt khác ±50
+    d, lb = _run("cong", "thong_thuy", 100)     # 38.8 Vượng, không cung tốt khác ±50
     s = suggest(d, lb)
     assert s.lower_mm is None and s.upper_mm is None
     assert "Cần kiến trúc sư" in s.note
@@ -59,6 +59,6 @@ def test_mat_bang_suggested():
     assert suggest(d, lb) is not None
 
 
-def test_cong_thong_thuy_is_52():
-    d, lb = _run("cong", "thong_thuy", 2000)     # khe đi vào -> 52.2
-    assert lb.ruler == "52.2"
+def test_cong_thong_thuy_is_388():
+    d, lb = _run("cong", "thong_thuy", 2000)     # override: chỉ tính 38.8
+    assert lb.ruler == "38.8"

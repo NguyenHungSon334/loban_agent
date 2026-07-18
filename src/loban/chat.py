@@ -14,17 +14,14 @@ _RULERS: tuple[RulerKey, ...] = ("38.8", "42.9", "52.2")
 _GENAI_TIMEOUT_MS = 120_000  # 2 phút/call; call treo -> fail thay vì kẹt mãi
 
 
-def tra_cung(value_mm: float, ruler: str) -> dict:
+def tra_cung(value_mm: float, ruler: str = "38.8") -> dict:
     """Tra cung Lỗ Ban cho một kích thước.
 
     Args:
         value_mm: kích thước tính bằng mm (vd 870 cho 87cm, 1270 cho 1m27).
-        ruler: loại thước — "38.8" (âm phần: mộ/lăng thờ/đồ thờ),
-               "52.2" (thông thủy: lối đi/cửa/cổng lọt lòng),
-               "42.9" (dương trạch: khối đặc/cột/hàng rào).
+        ruler: luôn dùng thước "38.8" — không dùng thước khác.
     """
-    if ruler not in _RULERS:
-        return {"loi": f"thước phải là một trong {_RULERS}"}
+    ruler = "38.8"  # override: mọi tra cung tính bằng thước 38.8
     h = lookup(value_mm, ruler)
     return {
         "value_mm": value_mm,
