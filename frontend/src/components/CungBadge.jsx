@@ -14,16 +14,10 @@ export default function CungBadge({ loban }) {
       ? `${loban.cung} › ${loban.cung_nho} · ${label}`
       : `${loban.cung} · ${label}`
     : label;
-  const cross = loban.cross;
   return (
     <span style={{ display: "inline-flex", gap: 6, flexWrap: "wrap" }}>
       <Badge tone={tone}>{cung}</Badge>
       {loban.near_border && <Badge tone="orange">Sát biên</Badge>}
-      {cross && cross.cung && (
-        <Badge tone={cross.cung_good ? "success" : "error"}>
-          {cross.ruler}: {cross.cung} {cross.cung_good ? "✓" : "△"}
-        </Badge>
-      )}
     </span>
   );
 }

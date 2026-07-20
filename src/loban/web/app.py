@@ -19,7 +19,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from ..classify import load_rules, save_rules
+from ..classify import RULER, load_rules, save_rules
 from ..models import AnalysisReport, ExtractionResult
 from ..pipeline import build_report
 from ..ruler import load_data
@@ -436,7 +436,9 @@ def ho_so_list(
 
 @app.get("/api/rulers")
 def rulers():
-    return load_data()
+    """Chỉ trả thước 38.8 — thước duy nhất hệ thống dùng."""
+    d = load_data()
+    return {**d, "rulers": {RULER: d["rulers"][RULER]}}
 
 
 @app.get("/api/rules")

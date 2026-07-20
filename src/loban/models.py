@@ -17,7 +17,7 @@ Category = str
 # khoi=khối đặc, tong_the=kích thước tổng, hop_tho=hộp thờ/bài vị
 Kind = Literal["phu_bi", "thong_thuy", "lot_long", "khoi", "tong_the", "hop_tho"]
 Confidence = Literal["cao", "trung_binh", "thap", "chua_xac_dinh"]
-RulerKey = Literal["52.2", "42.9", "38.8"]
+RulerKey = Literal["38.8"]   # chỉ dùng thước 38.8 (âm phần)
 Status = Literal["tot", "chua_phu_hop", "khong_ap_dung"]
 
 
@@ -32,15 +32,6 @@ class Dimension(BaseModel):
     estimated: bool = False          # True nếu suy theo tỷ lệ bản vẽ
 
 
-class CrossCheck(BaseModel):
-    """Đối chiếu THÊM bằng thước phụ (vd cổng thông thủy: 52.2 chính + 38.8 phụ)."""
-    ruler: RulerKey
-    cung: str | None = None
-    cung_nho: str | None = None
-    cung_good: bool | None = None
-    status: Status = "khong_ap_dung"
-
-
 class LobanResult(BaseModel):
     ruler: RulerKey | None = None
     cung: str | None = None            # cung lớn
@@ -49,7 +40,6 @@ class LobanResult(BaseModel):
     near_border: bool = False
     border_note: str | None = None
     status: Status = "khong_ap_dung"
-    cross: CrossCheck | None = None    # thước phụ đối chiếu thêm (nếu có)
 
 
 class Suggestion(BaseModel):

@@ -47,11 +47,9 @@ _AMBER_BG = (253, 240, 221)
 _AMBER_TX = (154, 77, 17)
 _ORANGE = (194, 65, 12)
 
-_RULER_ORDER = ["38.8", "52.2", "42.9"]
+_RULER_ORDER = ["38.8"]        # chỉ dùng thước 38.8
 _RULER_META = {
-    "38.8": ("A", "38,8 cm", "Âm phần", "Mộ · lăng thờ · đồ thờ cúng"),
-    "52.2": ("B", "52,2 cm", "Thông thủy", "Lối đi · cửa · cổng (lọt lòng)"),
-    "42.9": ("C", "42,9 cm", "Dương trạch", "Khối đặc · cột · hàng rào"),
+    "38.8": ("A", "38,8 cm", "Âm phần", "Toàn bộ hạng mục"),
 }
 
 _CUNG_Y_NGHIA = {
@@ -100,12 +98,7 @@ def _eval_style(it: AnalyzedItem) -> tuple[str, FontFace]:
 def _cung_name(it: AnalyzedItem) -> str:
     if not it.loban.cung:
         return "—"
-    txt = it.loban.cung + (f"\n{it.loban.cung_nho}" if it.loban.cung_nho else "")
-    cross = it.loban.cross
-    if cross and cross.cung:
-        mark = "✓" if cross.cung_good else "△"
-        txt += f"\n[{cross.ruler}: {cross.cung} {mark}]"
-    return txt
+    return it.loban.cung + (f"\n{it.loban.cung_nho}" if it.loban.cung_nho else "")
 
 
 def _item_label(it: AnalyzedItem) -> str:

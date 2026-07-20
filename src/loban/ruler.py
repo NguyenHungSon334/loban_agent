@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-RulerKey = str  # "52.2" | "42.9" | "38.8"
+RulerKey = str  # chỉ dùng "38.8" (bảng thước khác còn trong data nhưng không dùng)
 
 _DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "loban_data.json"
 

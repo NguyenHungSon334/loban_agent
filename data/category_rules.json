@@ -1,68 +1,321 @@
 {
-  "default_ruler": "38.8",
-  "thong_thuy_ruler": "52.2",
-  "category_ruler": { "loi_di": "52.2" },
-  "category_kind_ruler": {
-    "lang_tho.tong_the": "42.9",
-    "long_dinh.tong_the": "42.9"
-  },
-  "cross_ruler": { "cong.thong_thuy": "38.8" },
   "categories": [
-    { "key": "mo", "label": "Mộ" },
-    { "key": "cong", "label": "Cổng đá / cột cổng" },
-    { "key": "hang_rao", "label": "Hàng rào / lan can" },
-    { "key": "tran_phong", "label": "Trấn phong / cuốn thư" },
-    { "key": "long_dinh", "label": "Long đình / lăng thờ chung" },
-    { "key": "loi_di", "label": "Lối đi / bậc tam cấp" },
-    { "key": "khoang_cach", "label": "Khoảng cách bố trí" },
-    { "key": "lang_tho", "label": "Lăng thờ" },
-    { "key": "mat_bang", "label": "Mặt bằng khu" }
+    {
+      "key": "mo",
+      "label": "Mộ"
+    },
+    {
+      "key": "cong",
+      "label": "Cổng đá / cột cổng"
+    },
+    {
+      "key": "hang_rao",
+      "label": "Hàng rào / lan can"
+    },
+    {
+      "key": "tran_phong",
+      "label": "Trấn phong / cuốn thư"
+    },
+    {
+      "key": "long_dinh",
+      "label": "Long đình / lăng thờ chung"
+    },
+    {
+      "key": "loi_di",
+      "label": "Lối đi / bậc tam cấp"
+    },
+    {
+      "key": "khoang_cach",
+      "label": "Khoảng cách bố trí"
+    },
+    {
+      "key": "lang_tho",
+      "label": "Lăng thờ"
+    },
+    {
+      "key": "mat_bang",
+      "label": "Mặt bằng khu"
+    }
   ],
   "checklist": {
     "mo": [
-      { "label": "Dài phủ bì", "kind": "phu_bi", "match": ["dai", "chieu dai"], "required": true },
-      { "label": "Rộng phủ bì", "kind": "phu_bi", "match": ["rong", "chieu rong"], "required": true },
-      { "label": "Cao tổng thể", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Thân mộ", "kind": "khoi", "match": ["than mo", "than"], "required": false },
-      { "label": "Lỗ thông thiên", "kind": "thong_thuy", "match": ["thong thien", "thien"], "required": true },
-      { "label": "Ô chờ", "kind": "lot_long", "match": ["o cho", "cho"], "required": false },
-      { "label": "Ô kim tinh", "kind": "lot_long", "match": ["kim tinh", "kim"], "required": false },
-      { "label": "Khoang đặt tiểu / quan tài", "kind": "lot_long", "match": ["tieu", "quan tai", "khoang"], "required": false }
+      {
+        "label": "Dài phủ bì",
+        "kind": "phu_bi",
+        "match": [
+          "dai",
+          "chieu dai"
+        ],
+        "required": true
+      },
+      {
+        "label": "Rộng phủ bì",
+        "kind": "phu_bi",
+        "match": [
+          "rong",
+          "chieu rong"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Thân mộ",
+        "kind": "khoi",
+        "match": [
+          "than mo",
+          "than"
+        ],
+        "required": false
+      },
+      {
+        "label": "Lỗ thông thiên",
+        "kind": "thong_thuy",
+        "match": [
+          "thong thien",
+          "thien"
+        ],
+        "required": true
+      },
+      {
+        "label": "Ô chờ",
+        "kind": "lot_long",
+        "match": [
+          "o cho",
+          "cho"
+        ],
+        "required": false
+      },
+      {
+        "label": "Ô kim tinh",
+        "kind": "lot_long",
+        "match": [
+          "kim tinh",
+          "kim"
+        ],
+        "required": false
+      },
+      {
+        "label": "Khoang đặt tiểu / quan tài",
+        "kind": "lot_long",
+        "match": [
+          "tieu",
+          "quan tai",
+          "khoang"
+        ],
+        "required": false
+      }
     ],
     "cong": [
-      { "label": "Cao cột cổng", "kind": "khoi", "match": ["cot"], "required": true },
-      { "label": "Cao tổng thể cổng", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Thông thủy lối đi (rộng lọt lòng)", "kind": "thong_thuy", "match": ["thong thuy", "lot long", "lot long cong"], "required": true },
-      { "label": "Bậc / ngưỡng cổng", "kind": "phu_bi", "match": ["bac", "nguong"], "required": false }
+      {
+        "label": "Cao cột cổng",
+        "kind": "khoi",
+        "match": [
+          "cot"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao tổng thể cổng",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Thông thủy lối đi (rộng lọt lòng)",
+        "kind": "thong_thuy",
+        "match": [
+          "thong thuy",
+          "lot long",
+          "lot long cong"
+        ],
+        "required": true
+      },
+      {
+        "label": "Bậc / ngưỡng cổng",
+        "kind": "phu_bi",
+        "match": [
+          "bac",
+          "nguong"
+        ],
+        "required": false
+      }
     ],
     "hang_rao": [
-      { "label": "Cao tổng thể hàng rào", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Cao trụ", "kind": "khoi", "match": ["tru"], "required": true }
+      {
+        "label": "Cao tổng thể hàng rào",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao trụ",
+        "kind": "khoi",
+        "match": [
+          "tru"
+        ],
+        "required": true
+      }
     ],
     "tran_phong": [
-      { "label": "Ngang tổng thể", "kind": "tong_the", "match": ["ngang", "rong"], "required": true },
-      { "label": "Cao tổng thể", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Rộng thân trấn phong", "kind": "khoi", "match": ["than"], "required": false }
+      {
+        "label": "Ngang tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "ngang",
+          "rong"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Rộng thân trấn phong",
+        "kind": "khoi",
+        "match": [
+          "than"
+        ],
+        "required": false
+      }
     ],
     "long_dinh": [
-      { "label": "Ngang tổng thể", "kind": "tong_the", "match": ["ngang", "rong"], "required": true },
-      { "label": "Sâu tổng thể", "kind": "tong_the", "match": ["sau"], "required": true },
-      { "label": "Cao tổng thể", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Thông thủy gian thờ", "kind": "thong_thuy", "match": ["thong thuy", "gian tho"], "required": true },
-      { "label": "Gian thờ", "kind": "khoi", "match": ["gian"], "required": false }
+      {
+        "label": "Ngang tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "ngang",
+          "rong"
+        ],
+        "required": true
+      },
+      {
+        "label": "Sâu tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "sau"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Thông thủy gian thờ",
+        "kind": "thong_thuy",
+        "match": [
+          "thong thuy",
+          "gian tho"
+        ],
+        "required": true
+      },
+      {
+        "label": "Gian thờ",
+        "kind": "khoi",
+        "match": [
+          "gian"
+        ],
+        "required": false
+      }
     ],
     "lang_tho": [
-      { "label": "Ngang tổng thể", "kind": "tong_the", "match": ["ngang", "rong"], "required": true },
-      { "label": "Sâu tổng thể", "kind": "tong_the", "match": ["sau"], "required": true },
-      { "label": "Cao tổng thể", "kind": "tong_the", "match": ["cao"], "required": true },
-      { "label": "Thông thủy gian thờ", "kind": "thong_thuy", "match": ["thong thuy", "gian tho"], "required": true },
-      { "label": "Hộp thờ / bài vị", "kind": "hop_tho", "match": ["hop tho", "bai vi"], "required": false }
+      {
+        "label": "Ngang tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "ngang",
+          "rong"
+        ],
+        "required": true
+      },
+      {
+        "label": "Sâu tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "sau"
+        ],
+        "required": true
+      },
+      {
+        "label": "Cao tổng thể",
+        "kind": "tong_the",
+        "match": [
+          "cao"
+        ],
+        "required": true
+      },
+      {
+        "label": "Thông thủy gian thờ",
+        "kind": "thong_thuy",
+        "match": [
+          "thong thuy",
+          "gian tho"
+        ],
+        "required": true
+      },
+      {
+        "label": "Hộp thờ / bài vị",
+        "kind": "hop_tho",
+        "match": [
+          "hop tho",
+          "bai vi"
+        ],
+        "required": false
+      }
     ],
     "khoang_cach": [
-      { "label": "Cổng – trấn phong", "match": ["cong", "tran phong"], "required": false },
-      { "label": "Trấn phong – mộ", "match": ["tran phong", "mo"], "required": false },
-      { "label": "Mộ – lăng thờ", "match": ["mo", "lang"], "required": false },
-      { "label": "Rộng lối đi", "match": ["loi di", "loi"], "required": false }
+      {
+        "label": "Cổng – trấn phong",
+        "match": [
+          "cong",
+          "tran phong"
+        ],
+        "required": false
+      },
+      {
+        "label": "Trấn phong – mộ",
+        "match": [
+          "tran phong",
+          "mo"
+        ],
+        "required": false
+      },
+      {
+        "label": "Mộ – lăng thờ",
+        "match": [
+          "mo",
+          "lang"
+        ],
+        "required": false
+      },
+      {
+        "label": "Rộng lối đi",
+        "match": [
+          "loi di",
+          "loi"
+        ],
+        "required": false
+      }
     ]
   }
 }

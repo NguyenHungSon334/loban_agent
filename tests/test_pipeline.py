@@ -10,7 +10,7 @@ def _extraction():
     return ExtractionResult(dimensions=[
         # tốt, tin cậy cao
         Dimension(label="Rộng mộ", category="mo", kind="phu_bi", value_mm=870, confidence="cao"),
-        # xấu, cao -> có đề xuất, usable (lối đi 52.2 thông thủy, 160 -> xấu)
+        # xấu, cao -> có đề xuất, usable (lối đi tra bằng 38.8, 160 -> xấu)
         Dimension(label="Lối đi", category="loi_di", kind="thong_thuy", value_mm=160, confidence="cao"),
         # tin cậy thấp -> need_confirm + không usable
         Dimension(label="Cổng mờ", category="cong", kind="thong_thuy", value_mm=2060, confidence="thap", need_confirm=True),

@@ -21,10 +21,10 @@ def _report(n=1):
         Dimension(label=f"KT {i}", category="mo", kind="phu_bi", value_mm=870, confidence="cao")
         for i in range(n)
     ]
-    dims.append(Dimension(label="Lối đi", category="loi_di", kind="thong_thuy", value_mm=160, confidence="cao"))  # 52.2 thông thủy, xấu
+    dims.append(Dimension(label="Lối đi", category="loi_di", kind="thong_thuy", value_mm=160, confidence="cao"))  # tra bằng 38.8, xấu
     dims.append(Dimension(label="Cổng mờ", category="cong", kind="thong_thuy", value_mm=2060,
                           confidence="thap", need_confirm=True))
-    dims.append(Dimension(label="Cột hàng rào", category="lang_tho", kind="tong_the", value_mm=2500, confidence="cao"))  # 42.9 dương trạch
+    dims.append(Dimension(label="Cột hàng rào", category="lang_tho", kind="tong_the", value_mm=2500, confidence="cao"))  # tra bằng 38.8
     return build_report(ExtractionResult(dimensions=dims),
                         Profile(ho_so="HS01", khach_hang="Ông A", dia_diem="Thanh Hóa"))
 

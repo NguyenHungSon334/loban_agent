@@ -16,13 +16,6 @@ const FILTER_STATUS = [
   { value: "tot", label: "Tốt" },
   { value: "chua_phu_hop", label: "Chưa phù hợp" },
 ];
-const FILTER_RULER = [
-  { value: "", label: "Tất cả thước" },
-  { value: "38.8", label: "38.8 cm" },
-  { value: "52.2", label: "52.2 cm" },
-  { value: "42.9", label: "42.9 cm" },
-];
-
 // file: tải file có sẵn · export: render on-demand (PNG/PDF) loại item bỏ tích
 const DOWNLOADS = [
   { key: "json", label: "Tải JSON", file: "analysis.json" },
@@ -41,7 +34,6 @@ export default function Report() {
   const [err, setErr] = useState(null);
   const [excluded, setExcluded] = useState(() => new Set()); // index không xuất bản in
   const [fStatus, setFStatus] = useState(""); // lọc bảng theo trạng thái
-  const [fRuler, setFRuler] = useState(""); // lọc bảng theo thước
 
   function toggleExclude(i) {
     setExcluded((prev) => {
@@ -110,7 +102,6 @@ export default function Report() {
     .map((_, i) => i)
     .filter((i) => {
       if (fStatus && items[i].loban.status !== fStatus) return false;
-      if (fRuler && items[i].loban.ruler !== fRuler) return false;
       return true;
     });
 
@@ -156,8 +147,7 @@ export default function Report() {
       <div className={styles.tableBar}>
         <div className={styles.tableFilters}>
           <Select value={fStatus} onChange={setFStatus} options={FILTER_STATUS} />
-          <Select value={fRuler} onChange={setFRuler} options={FILTER_RULER} />
-          {(fStatus || fRuler) && (
+          {fStatus && (
             <span className={styles.filterCount}>
               {visibleIndices.length}/{items.length} dòng
             </span>

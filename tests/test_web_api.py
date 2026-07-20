@@ -165,23 +165,23 @@ def test_retry_requeues_and_runs(client):
 
 def test_rules_get_default(client):
     r = client.get("/api/rules").json()
-    assert r["default_ruler"] == "38.8"
-    assert r["category_ruler"]["loi_di"] == "52.2"
+    assert "categories" in r and "checklist" in r
+    # cấu hình thước theo hạng mục đã bỏ hẳn
+    assert not any(k.endswith("_ruler") for k in r)
 
 
-def test_rules_put_affects_classify(client):
-    cfg = {
-        "default_ruler": "38.8",
-        "thong_thuy_ruler": "52.2",
-        "category_ruler": {"loi_di": "42.9", "mo": "52.2"},
-    }
-    assert client.put("/api/rules", json=cfg).status_code == 200
+def test_rules_put_khong_doi_duoc_thuoc(client):
+    cfg = {"categories": [{"key": "mo", "label": "Mộ"}],
+           "category_ruler": {"loi_di": "42.9", "mo": "52.2"}}
+    saved = client.put("/api/rules", json=cfg)
+    assert saved.status_code == 200
+    assert "category_ruler" not in saved.json()      # key thước cũ bị loại khi lưu
     from loban.classify import ruler_for
-    assert ruler_for("mo", "phu_bi") == "38.8"      # override: rule không đổi được thước nữa
+    assert ruler_for("mo", "phu_bi") == "38.8"
 
 
 def test_rules_put_invalid(client):
-    r = client.put("/api/rules", json={"category_ruler": {"mo": "99.9"}})
+    r = client.put("/api/rules", json={"categories": "khong-phai-list"})
     assert r.status_code == 422
 
 
@@ -194,4 +194,4 @@ def test_ho_so_list_and_rulers(client):
     lst = client.get("/api/ho-so").json()
     assert any(j["ho_so"] == "HS04" for j in lst)
     rulers = client.get("/api/rulers").json()
-    assert "rulers" in rulers and "52.2" in rulers["rulers"]
+    assert list(rulers["rulers"]) == ["38.8"]   # API chỉ trả thước 38.8

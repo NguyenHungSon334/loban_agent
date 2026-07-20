@@ -56,12 +56,12 @@ def test_classify_near_border_propagates():
 
 
 def test_cong_thong_thuy_single_ruler():
-    # Override: cổng thông thủy nay cũng chỉ tính 38.8, không còn thước phụ.
-    r = classify(_dim("cong", "thong_thuy", 810))
-    assert r.ruler == "38.8"
-    assert r.cross is None
+    # Cổng thông thủy cũng chỉ tính 38.8, không còn thước phụ.
+    assert classify(_dim("cong", "thong_thuy", 810)).ruler == "38.8"
 
 
-def test_no_cross_for_normal_dim():
-    r = classify(_dim("mo", "phu_bi", 870))
-    assert r.cross is None
+def test_moi_hang_muc_deu_38_8():
+    for cat, kind in [("mo", "phu_bi"), ("loi_di", "thong_thuy"),
+                      ("lang_tho", "tong_the"), ("long_dinh", "tong_the"),
+                      ("hang_rao", "khoi"), ("cong", "thong_thuy")]:
+        assert classify(_dim(cat, kind, 870)).ruler == "38.8"

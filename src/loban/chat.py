@@ -10,7 +10,7 @@ from .config import get_settings
 from .ingest import ImagePart
 from .ruler import RulerKey, lookup
 
-_RULERS: tuple[RulerKey, ...] = ("38.8", "42.9", "52.2")
+_RULERS: tuple[RulerKey, ...] = ("38.8",)  # chỉ dùng thước 38.8
 _GENAI_TIMEOUT_MS = 120_000  # 2 phút/call; call treo -> fail thay vì kẹt mãi
 
 
@@ -40,11 +40,9 @@ Bạn KHÔNG có bảng cung trong đầu và KHÔNG được tự suy tên cung
 cung (tốt/xấu, tên cung lớn › cung nhỏ) BẮT BUỘC phải lấy từ kết quả hàm tra_cung.
 Nếu chưa gọi tra_cung, TUYỆT ĐỐI không nêu bất kỳ tên cung nào. Có số là phải gọi.
 
-Chọn thước theo hạng mục rồi GỌI tra_cung:
-- 38,8cm — âm phần: mộ, lăng thờ, hộp thờ, đồ thờ cúng.
-- 52,2cm — thông thủy: lối đi, cửa, cổng (khoảng lọt lòng), ô thoáng.
-- 42,9cm — dương trạch: khối đặc, cột, hàng rào, bậc.
-Không rõ hạng mục -> mặc định 38,8cm (âm phần).
+CHỈ dùng DUY NHẤT thước 38,8cm (âm phần) cho MỌI hạng mục — mộ, lăng thờ, hộp thờ,
+đồ thờ, lối đi, cửa, cổng, thông thủy, khối đặc, cột, hàng rào, bậc... tất cả.
+TUYỆT ĐỐI không nhắc tới thước 52,2cm hay 42,9cm. Có số là GỌI tra_cung.
 
 Đổi kích thước ra mm trước khi gọi: "87" hay "87cm" -> 870mm; "1m27"/"1.27m" -> 1270mm;
 số đã là mm (vd "480mm", "480") thì giữ nguyên.
